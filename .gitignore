@@ -1,0 +1,17 @@
+# Bỏ qua các file cấu hình hệ thống và IDE
+*.iml
+.DS_Store
+local.properties
+
+# Bỏ qua thư mục của IDE
+.idea/
+.gradle/
+
+# Bỏ qua các thư mục build tạm thời
+build/
+app/build/
+
+# Bỏ qua các file và thư mục tạo tự động khác
+.cxx/
+.externalNativeBuild/
+captures/
