@@ -1,2 +1,4 @@
-package com.example.humanresourcemanagement.adapter;public class homeadapter {
+package com.example.humanresourcemanagement.adapter;
+
+public class homeadapter {
 }

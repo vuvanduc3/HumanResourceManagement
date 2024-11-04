@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "44053889069",
+    "firebase_url": "https://hrm-pj-team3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hrm-pj-team3",
+    "storage_bucket": "hrm-pj-team3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44053889069:android:8360a922eaddd8df77b8a4",
+        "android_client_info": {
+          "package_name": "com.example.humanresourcemanagement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlxV-PvQ1b3IWJ_XjmEJTxtiezlwLeaL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
