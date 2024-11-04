@@ -14,13 +14,4 @@ captures/
 .externalNativeBuild/
 .cxx/
 
-# Giữ lại tất cả file nguồn và tài nguyên quan trọng
-!**/*.java
-!**/*.xml
-!**/*.kt
-!**/*.gradle
-!**/AndroidManifest.xml
-!**/*.png
-!**/*.jpg
-!**/*.gif
-!**/*.xml
+
