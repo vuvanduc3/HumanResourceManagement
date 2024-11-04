@@ -44,29 +44,43 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="100dp"
+                android:layout_row="0"
+                android:layout_column="0"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/boder_home_nhanvien"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                android:padding="16dp"
-
-                android:layout_marginEnd="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- LinearLayout chứa số và icon -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="20"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="20"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/user_icon_24" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nhân viên"
-                    android:textSize="16sp"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -74,18 +88,30 @@
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:background="@drawable/boder_home_phongban"
                 android:padding="16dp"
                 android:layout_marginStart="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="4"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="4"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/phongban_icon" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,20 +126,31 @@
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:background="@drawable/boder_home_luong"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Chưa có"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="20"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/luongnv_icon" />
+                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,20 +165,31 @@
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:background="@drawable/boder_home_khenthuong"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Chưa có"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="20"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/kynang_icon" />
+                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
