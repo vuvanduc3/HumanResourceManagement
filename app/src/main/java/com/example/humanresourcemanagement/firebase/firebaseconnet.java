@@ -1,2 +1,4 @@
-package com.example.humanresourcemanagement.firebase;public class firebaseconnet {
+package com.example.humanresourcemanagement.firebase;
+
+public class firebaseconnet {
 }
