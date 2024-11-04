@@ -1,17 +1,26 @@
-# Bỏ qua các file cấu hình hệ thống và IDE
+# Bỏ qua các file và thư mục không cần thiết
 *.iml
+.gradle/
+.idea/
 .DS_Store
 local.properties
 
-# Bỏ qua thư mục của IDE
-.idea/
-.gradle/
-
-# Bỏ qua các thư mục build tạm thời
+# Bỏ qua thư mục build (chứa file tạm thời)
 build/
 app/build/
 
-# Bỏ qua các file và thư mục tạo tự động khác
-.cxx/
-.externalNativeBuild/
+# Bỏ qua các file và thư mục tạm thời khác
 captures/
+.externalNativeBuild/
+.cxx/
+
+# Giữ lại tất cả file nguồn và tài nguyên quan trọng
+!**/*.java
+!**/*.xml
+!**/*.kt
+!**/*.gradle
+!**/AndroidManifest.xml
+!**/*.png
+!**/*.jpg
+!**/*.gif
+!**/*.xml
