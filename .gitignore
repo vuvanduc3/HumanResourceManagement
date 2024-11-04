@@ -1,15 +1,17 @@
+# Bỏ qua các file cấu hình hệ thống và IDE
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
 local.properties
+
+# Bỏ qua thư mục của IDE
+.idea/
+.gradle/
+
+# Bỏ qua các thư mục build tạm thời
+build/
+app/build/
+
+# Bỏ qua các file và thư mục tạo tự động khác
+.cxx/
+.externalNativeBuild/
+captures/
