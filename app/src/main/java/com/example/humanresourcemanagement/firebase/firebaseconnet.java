@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class firebaseconnet {
-
+    private static final String TAG = "EmployeeListActivity";
     private FirebaseFirestore db;
 
     // Constructor với Context
@@ -55,6 +55,7 @@ public class firebaseconnet {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Employee employee = document.toObject(Employee.class); // Chuyển đổi tài liệu thành đối tượng Employee
                             employeeList.add(employee);
+                            Log.d(TAG, "getEmployeeList: " + employee.getImageUrl());
                         }
                         listener.onEmployeeListReceived(employeeList);
                     } else {
