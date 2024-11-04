@@ -15,6 +15,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".activity.EmployeeListActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
