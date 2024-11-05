@@ -46,6 +46,7 @@ public class firebaseconnet {
                     Log.w("firebaseconnet", "Error adding document", e);
                 });
     }
+
     // Phương thức để lấy danh sách nhân viên
     public void getEmployeeList(OnEmployeeListReceivedListener listener) {
         CollectionReference employeesRef = db.collection("employees");
@@ -65,6 +66,7 @@ public class firebaseconnet {
                     }
                 });
     }
+
     public void getEmployeeById(String employeeId, OnEmployeeReceivedListener listener) {
         CollectionReference employeesRef = db.collection("employees");
         employeesRef.whereEqualTo("employeeId", employeeId)
@@ -85,6 +87,7 @@ public class firebaseconnet {
     // Interface để nhận kết quả Employee
     public interface OnEmployeeReceivedListener {
         void onEmployeeReceived(Employee employee);
+
         void onEmployeeError(Exception e);
     }
 
@@ -92,5 +95,7 @@ public class firebaseconnet {
     // Interface để nhận danh sách nhân viên
     public interface OnEmployeeListReceivedListener {
         void onEmployeeListReceived(List<Employee> employeeList);
+
         void onEmployeeListError(Exception e);
     }
+}
