@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -64,6 +65,29 @@ public class firebaseconnet {
                     }
                 });
     }
+    public void getEmployeeById(String employeeId, OnEmployeeReceivedListener listener) {
+        CollectionReference employeesRef = db.collection("employees");
+        employeesRef.whereEqualTo("employeeId", employeeId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        Employee employee = document.toObject(Employee.class); // Chuyển tài liệu thành đối tượng Employee
+                        listener.onEmployeeReceived(employee);
+                    } else {
+                        Log.w(TAG, "No employee found with employeeId: " + employeeId);
+                        listener.onEmployeeError(task.getException());
+                    }
+                });
+    }
+
+
+    // Interface để nhận kết quả Employee
+    public interface OnEmployeeReceivedListener {
+        void onEmployeeReceived(Employee employee);
+        void onEmployeeError(Exception e);
+    }
+
 
     // Interface để nhận danh sách nhân viên
     public interface OnEmployeeListReceivedListener {

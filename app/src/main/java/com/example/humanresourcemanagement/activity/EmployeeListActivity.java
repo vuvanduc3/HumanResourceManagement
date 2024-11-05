@@ -1,5 +1,6 @@
 package com.example.humanresourcemanagement.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -37,6 +38,12 @@ public class EmployeeListActivity extends AppCompatActivity {
 
         employeeAdapter = new EmployeeAdapter(employeeList);
         recyclerViewEmployees.setAdapter(employeeAdapter);
+        // Thiết lập sự kiện nhấp vào cho từng item
+        employeeAdapter.setOnItemClickListener(employeeId -> {
+            Intent intent = new Intent(EmployeeListActivity.this, EmployeeDetailActivity.class);
+            intent.putExtra("employeeId", employeeId);
+            startActivity(intent);
+        });
 
         // Khởi tạo FirebaseConnect
         firebaseConnection = new firebaseconnet(this);

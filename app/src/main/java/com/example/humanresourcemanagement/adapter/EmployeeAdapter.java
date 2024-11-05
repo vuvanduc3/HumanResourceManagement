@@ -16,12 +16,23 @@ import com.bumptech.glide.Glide;
 import com.example.humanresourcemanagement.R;
 import com.example.humanresourcemanagement.model.Employee;
 
+
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    private List<Employee> employeeList; // Sử dụng kiểu Employee thay vì Map
+    private List<Employee> employeeList;
+    private OnItemClickListener onItemClickListener;
 
     public EmployeeAdapter(List<Employee> employeeList) {
         this.employeeList = employeeList;
+    }
+
+    // Interface để lắng nghe sự kiện nhấp vào item
+    public interface OnItemClickListener {
+        void onItemClick(String employeeId);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     @NonNull
@@ -34,18 +45,26 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     @Override
     public void onBindViewHolder(@NonNull EmployeeViewHolder holder, int position) {
         Employee employee = employeeList.get(position);
-        holder.nameTextView.setText(employee.getName()); // Truy cập thông tin qua đối tượng Employee
-        holder.positionTextView.setText(employee.getChucvuId()); // Giả sử có trường "chucvuId" tương ứng với vị trí
-        String imageUrl =  employee.getImageUrl();
+        holder.nameTextView.setText(employee.getName());
+        holder.positionTextView.setText(employee.getChucvuId());
+        String imageUrl = employee.getImageUrl();
+
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(holder.img.getContext())
                     .load(imageUrl)
-                    .placeholder(R.drawable.baseline_download_for_offline_24) // ảnh tạm trong lúc tải
-                    .error(R.drawable.baseline_error_outline_24)             // ảnh hiển thị nếu tải thất bại
+                    .placeholder(R.drawable.baseline_download_for_offline_24)
+                    .error(R.drawable.baseline_error_outline_24)
                     .into(holder.img);
         } else {
-            holder.img.setImageResource(R.drawable.baseline_error_outline_24); // ảnh mặc định nếu không có URL
+            holder.img.setImageResource(R.drawable.baseline_error_outline_24);
         }
+
+        // Xử lý sự kiện nhấp vào item
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(employee.getEmployeeId());
+            }
+        });
     }
 
     @Override
@@ -56,7 +75,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     public static class EmployeeViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView positionTextView;
-        ImageView img ;
+        ImageView img;
 
         public EmployeeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,3 +85,4 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         }
     }
 }
+
