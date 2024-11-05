@@ -94,4 +94,3 @@ public class firebaseconnet {
         void onEmployeeListReceived(List<Employee> employeeList);
         void onEmployeeListError(Exception e);
     }
-}
