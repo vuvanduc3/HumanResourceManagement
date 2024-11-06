@@ -176,6 +176,33 @@ public class firebaseconnet {
                     }
                 });
     }
+    // Phương thức để thêm chức vụ mới
+    public void addChucVu(String chucvuId, String tenChucVu, String heSoChucVu, final OnChucVuAddListener listener) {
+        CollectionReference chucVuRef = db.collection("chucvu");
+
+        // Tạo một đối tượng ChucVu mới
+        Map<String, Object> chucVuData = new HashMap<>();
+        chucVuData.put("chucvu_id", chucvuId);
+        chucVuData.put("loaichucvu", tenChucVu);
+        chucVuData.put("hschucvu", heSoChucVu);
+
+        // Thêm đối tượng vào collection
+        chucVuRef.add(chucVuData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "Chức vụ đã được thêm với ID: " + documentReference.getId());
+                    listener.onChucVuAdded();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Lỗi khi thêm chức vụ", e);
+                    listener.onChucVuAddError(e);
+                });
+    }
+
+    public interface OnChucVuAddListener {
+        void onChucVuAdded();
+        void onChucVuAddError(Exception e);
+    }
+
 
     // Interface để nhận kết quả xóa chức vụ
     public interface OnChucVuDeleteListener {
