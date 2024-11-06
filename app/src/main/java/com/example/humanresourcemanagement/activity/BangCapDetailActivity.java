@@ -47,6 +47,12 @@ public class BangCapDetailActivity extends AppCompatActivity {
 
         // Handle Delete button click
         binding.btnDeleteCV.setOnClickListener(view -> confirmDelete());
+
+        // Handle Back button click
+        binding.btnBack.setOnClickListener(view -> {
+            Intent intent = new Intent(BangCapDetailActivity.this, BangCapListActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void getBangCapDetails(String bangcap_id) {

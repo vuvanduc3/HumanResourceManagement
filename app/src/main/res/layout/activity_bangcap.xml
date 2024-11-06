@@ -20,9 +20,10 @@
             android:contentDescription="Back"/>
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="30dp"
             android:text="Danh sách bằng cấp"
             android:textStyle="bold"
             android:textSize="18sp"/>

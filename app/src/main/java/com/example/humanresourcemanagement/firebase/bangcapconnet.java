@@ -63,16 +63,51 @@ public class bangcapconnet {
 
     // Method to add a new BangCap
     public void addBangCap(BangCap bangCap, OnOperationCompleteListener listener) {
-        db.collection("bangcap").add(bangCap)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "BangCap added with ID: " + documentReference.getId());
-                    listener.onOperationSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error adding BangCap", e);
-                    listener.onOperationError(e);
-                });
+        CollectionReference bangcapRef = db.collection("bangcap");
+
+        // Fetch all documents to find the highest bangcap_id
+        bangcapRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                int maxId = 0;
+
+                // Loop through documents to find the highest bangcap_id
+                for (DocumentSnapshot document : task.getResult()) {
+                    String id = document.getId();
+                    if (id.startsWith("bc")) {
+                        try {
+                            int numericId = Integer.parseInt(id.substring(2));
+                            if (numericId > maxId) {
+                                maxId = numericId;
+                            }
+                        } catch (NumberFormatException e) {
+                            Log.w(TAG, "Invalid bangcap_id format: " + id);
+                        }
+                    }
+                }
+
+                // Generate a new bangcap_id with the incremented value
+                String newDocumentId = "bc" + String.format("%02d", maxId + 1);
+                bangCap.setBangcap_id(newDocumentId); // Set the new ID in the BangCap object
+
+                // Add BangCap with the new document ID
+                bangcapRef.document(newDocumentId)
+                        .set(bangCap)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d(TAG, "BangCap added with ID: " + newDocumentId);
+                            listener.onOperationSuccess();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.w(TAG, "Error adding BangCap", e);
+                            listener.onOperationError(e);
+                        });
+            } else {
+                Log.w(TAG, "Error retrieving bangcap documents", task.getException());
+                listener.onOperationError(task.getException());
+            }
+        });
     }
+
+
 
     // Method to update an existing BangCap by document ID
     public void updateBangCap(String documentId, BangCap updatedBangCap, OnOperationCompleteListener listener) {

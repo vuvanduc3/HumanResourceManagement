@@ -18,11 +18,11 @@ import java.util.List;
 
 public class BangCapAdapter extends RecyclerView.Adapter<BangCapAdapter.EmployeeViewHolder> {
 
-    private List<BangCap> employeeList;
+    private List<BangCap> bangCapList;
     private OnItemClickListener onItemClickListener;
 
-    public BangCapAdapter(List<BangCap> employeeList) {
-        this.employeeList = employeeList;
+    public BangCapAdapter(List<BangCap> bangCapList) {
+        this.bangCapList = bangCapList;
     }
 
     // Interface để lắng nghe sự kiện nhấp vào item
@@ -43,7 +43,7 @@ public class BangCapAdapter extends RecyclerView.Adapter<BangCapAdapter.Employee
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeViewHolder holder, int position) {
-        BangCap employee = employeeList.get(position);
+        BangCap employee = bangCapList.get(position);
         holder.nameTextView.setText(employee.getBangcap_id());
         holder.positionTextView.setText(employee.getTenBang());
 //
@@ -58,7 +58,7 @@ public class BangCapAdapter extends RecyclerView.Adapter<BangCapAdapter.Employee
 
     @Override
     public int getItemCount() {
-        return employeeList.size();
+        return bangCapList.size();
     }
 
     public static class EmployeeViewHolder extends RecyclerView.ViewHolder {

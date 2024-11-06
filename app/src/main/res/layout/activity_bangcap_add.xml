@@ -1,0 +1,56 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+
+         android:gravity="center">
+
+
+          <TextView
+              android:layout_width="192dp"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:gravity="center"
+              android:text="Thêm bằng cấp"
+              android:textSize="20sp"
+              android:textStyle="bold" />
+
+
+     </LinearLayout>
+
+
+     <EditText
+         android:id="@+id/edtBangCapId"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="2dp"
+         android:hint="Mã bằng cấp"
+         android:focusable="false"
+         android:clickable="false"
+         android:longClickable="false"
+         android:textColor="@android:color/black" />
+
+     <EditText
+         android:id="@+id/edtTenBang"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="2dp"
+         android:hint="Tên bằng cấp"/>
+
+     <androidx.appcompat.widget.AppCompatButton
+         android:id="@+id/btnAdd"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="Thêm"
+         android:background="@drawable/rounded_button_green"/>
+
+</LinearLayout>
