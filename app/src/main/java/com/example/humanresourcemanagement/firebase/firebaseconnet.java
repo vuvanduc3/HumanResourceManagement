@@ -120,6 +120,68 @@ public class firebaseconnet {
                     }
                 });
     }
+    // Phương thức để cập nhật thông tin chức vụ
+    public void editChucVu(String chucvuId, String newHeSoChucVu,  final OnChucVuReceivedListener listener) {
+        CollectionReference chucVuRef = db.collection("chucvu");
+
+        // Tìm chức vụ dựa trên chucvuId
+        chucVuRef.whereEqualTo("chucvu_id", chucvuId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        // Lấy reference của document
+                        document.getReference().update(
+                                "hschucvu", newHeSoChucVu
+
+                        ).addOnCompleteListener(updateTask -> {
+                            if (updateTask.isSuccessful()) {
+                                Log.d(TAG, "Chuc Vu updated successfully");
+                                // Trả về đối tượng ChucVu đã được cập nhật
+                                ChucVu updatedChucVu = document.toObject(ChucVu.class);
+                                listener.onChucVuReceived(updatedChucVu);
+                            } else {
+                                Log.w(TAG, "Error updating Chuc Vu", updateTask.getException());
+                                listener.onChucVuError(updateTask.getException());
+                            }
+                        });
+                    } else {
+                        Log.w(TAG, "No Chuc Vu found with chucvuId: " + chucvuId);
+                        listener.onChucVuError(task.getException());
+                    }
+                });
+    }
+    // Phương thức để xóa chức vụ dựa trên chucvu_id
+    public void deleteChucVu(String chucvuId, final OnChucVuDeleteListener listener) {
+        CollectionReference chucVuRef = db.collection("chucvu");
+
+        // Tìm chức vụ dựa trên chucvu_id
+        chucVuRef.whereEqualTo("chucvu_id", chucvuId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        // Xóa tài liệu tìm thấy
+                        document.getReference().delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "Chuc Vu deleted successfully");
+                                    listener.onChucVuDeleted();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w(TAG, "Error deleting Chuc Vu", e);
+                                    listener.onChucVuDeleteError(e);
+                                });
+                    } else {
+                        Log.w(TAG, "No Chuc Vu found with chucvuId: " + chucvuId);
+                        listener.onChucVuDeleteError(task.getException());
+                    }
+                });
+    }
+
+    // Interface để nhận kết quả xóa chức vụ
+    public interface OnChucVuDeleteListener {
+        void onChucVuDeleted();
+        void onChucVuDeleteError(Exception e);
+    }
 
     // Interface để nhận danh sách chức vụ
     public interface OnChucVuListReceivedListener {

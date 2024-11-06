@@ -13,7 +13,10 @@
         android:theme="@style/Theme.HumanResourceManagement"
         tools:targetApi="31">
         <activity
-            android:name=".ChucVuDetailActivity"
+            android:name=".activity.EditChucVuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ChucVuDetailActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ChucVuActivity"

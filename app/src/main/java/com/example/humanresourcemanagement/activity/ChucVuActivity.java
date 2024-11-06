@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.humanresourcemanagement.ChucVuDetailActivity;
 import com.example.humanresourcemanagement.R;
 import com.example.humanresourcemanagement.adapter.ChucVuAdapter;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
