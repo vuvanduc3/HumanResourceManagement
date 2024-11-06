@@ -3,6 +3,7 @@ package com.example.humanresourcemanagement.firebase;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.humanresourcemanagement.model.ChucVu;
 import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
@@ -81,6 +82,58 @@ public class firebaseconnet {
                         listener.onEmployeeError(task.getException());
                     }
                 });
+    }
+
+    // Phương thức để lấy danh sách chức vụ
+    public void getChucVuList(OnChucVuListReceivedListener listener) {
+        CollectionReference chucVuRef = db.collection("chucvu");
+        chucVuRef.get()
+                .addOnCompleteListener(task -> {
+                    List<ChucVu> chucVuList = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ChucVu chucVu = document.toObject(ChucVu.class);
+                            chucVuList.add(chucVu);
+                            Log.d(TAG, "getChucVuList: " + chucVu.getLoaichucvu());
+                        }
+                        listener.onChucVuListReceived(chucVuList);
+                    } else {
+                        Log.w(TAG, "Error getting chucvus.", task.getException());
+                        listener.onChucVuListError(task.getException());
+                    }
+                });
+    }
+
+    // Phương thức để lấy chi tiết chức vụ theo chucvuId
+    public void getChucVuById(String chucvuId, OnChucVuReceivedListener listener) {
+        CollectionReference chucVuRef = db.collection("chucvu");
+        chucVuRef.whereEqualTo("chucvu_id", chucvuId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        ChucVu chucVu = document.toObject(ChucVu.class);
+                        listener.onChucVuReceived(chucVu);
+                    } else {
+                        Log.w(TAG, "No ChucVu found with chucvuId: " + chucvuId);
+                        listener.onChucVuError(task.getException());
+                    }
+                });
+    }
+
+    // Interface để nhận danh sách chức vụ
+    public interface OnChucVuListReceivedListener {
+        void onChucVuListReceived(List<ChucVu> chucVuList);
+
+        void onChucVuListError(Exception e);
+
+    }
+
+    // Interface để nhận chi tiết chức vụ
+    public interface OnChucVuReceivedListener {
+        void onChucVuReceived(ChucVu chucVu);
+
+        void onChucVuError(Exception e);
     }
 
 

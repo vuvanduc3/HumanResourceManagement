@@ -26,6 +26,14 @@ public class HomeScreen extends AppCompatActivity {
 
             }
         });
+        binding.lnChucVu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreen.this, ChucVuActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
 }

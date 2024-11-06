@@ -13,21 +13,26 @@
         android:theme="@style/Theme.HumanResourceManagement"
         tools:targetApi="31">
         <activity
+            android:name=".ChucVuDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ChucVuActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.EmployeeDetailActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".activity.EmployeeListActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".activity.HomeScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
