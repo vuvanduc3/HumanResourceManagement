@@ -238,7 +238,7 @@
 
             <!-- Employee Button -->
             <LinearLayout
-                android:id="@+id/id1"
+                android:id="@+id/lnNhanVien"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
