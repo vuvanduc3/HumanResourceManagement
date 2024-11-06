@@ -19,9 +19,6 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.bottom_layout);
 
-        // Khởi tạo kết nối Firebase và truyền context
-        firebaseconnet firebaseConnection = new firebaseconnet(this);
-        firebaseConnection.addData();  // Gọi phương thức để thêm dữ liệu
 
     }
 }

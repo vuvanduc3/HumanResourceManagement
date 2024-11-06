@@ -21,9 +21,13 @@
         <activity
             android:name=".activity.EmployeeListActivity"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".activity.HomeScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
