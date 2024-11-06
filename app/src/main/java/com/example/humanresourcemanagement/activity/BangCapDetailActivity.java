@@ -1,60 +1,130 @@
 package com.example.humanresourcemanagement.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.humanresourcemanagement.R;
-import com.example.humanresourcemanagement.databinding.ActivityEmployeeDetailBinding;
-import com.example.humanresourcemanagement.firebase.firebaseconnet;
-import com.example.humanresourcemanagement.model.Employee;
-import com.squareup.picasso.Picasso;
+import com.example.humanresourcemanagement.databinding.AcivityBangcapDetailBinding;
+import com.example.humanresourcemanagement.firebase.bangcapconnet;
+import com.example.humanresourcemanagement.model.BangCap;
 
-public class EmployeeDetailActivity extends AppCompatActivity {
+public class BangCapDetailActivity extends AppCompatActivity {
 
-    private ActivityEmployeeDetailBinding binding;
-    private firebaseconnet firebaseconnet;
+    private AcivityBangcapDetailBinding binding;
+    private bangcapconnet bangcapconnet;
+    private String documentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityEmployeeDetailBinding.inflate(getLayoutInflater());
+        binding = AcivityBangcapDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Lấy employeeId từ Intent
-        String employeeId = getIntent().getStringExtra("employeeId");
+        // Get bangcap_id from Intent
+        documentId = getIntent().getStringExtra("bangcap_id");
 
-        // Khởi tạo Firebase
-        firebaseconnet = new firebaseconnet(this);
+        // Initialize Firebase
+        bangcapconnet = new bangcapconnet(this);
 
-        // Gọi hàm lấy thông tin nhân viên
-        getEmployeeDetails(employeeId);
+        // Fetch BangCap details
+        getBangCapDetails(documentId);
+
+        // Handle Edit button click
+        binding.btnEditCV.setOnClickListener(view -> toggleEditing());
+
+        // Handle Save button click
+        binding.btnSaveCV.setOnClickListener(view -> {
+            if (areFieldsFilled()) {
+                saveBangCapDetails();
+            } else {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Handle Delete button click
+        binding.btnDeleteCV.setOnClickListener(view -> confirmDelete());
     }
 
-    private void getEmployeeDetails(String employeeId) {
-        firebaseconnet.getEmployeeById(employeeId, new firebaseconnet.OnEmployeeReceivedListener() {
+    private void getBangCapDetails(String bangcap_id) {
+        bangcapconnet.getBangCapById(bangcap_id, new bangcapconnet.OnBangCapReceivedListener() {
             @Override
-            public void onEmployeeReceived(Employee employee) {
-                // Cập nhật UI với thông tin nhân viên
-                binding.nameTextView.setText(employee.getName());
-                binding.positionTextView.setText(employee.getChucvuId());
-                binding.addressTextView.setText(employee.getDiachi());
-                binding.phoneTextView.setText(employee.getSdt());
-                binding.birthDateTextView.setText(employee.getNgaysinh());
-                binding.statusTextView.setText(employee.getTrangthai());
-                binding.tvCCCD.setText(employee.getCccd());
-                binding.tvLuong.setText(employee.getLuongcoban());
-                binding.tvGioiTinh.setText(employee.getGioitinh());
-                binding.tvMaNV.setText(employee.getEmployeeId());
-
-                // Hiển thị hình ảnh sử dụng thư viện Picasso
-                if (employee.getImageUrl() != null && !employee.getImageUrl().isEmpty()) {
-                    Picasso.get().load(employee.getImageUrl()).into(binding.profileImageView);
-                }
+            public void onBangCapReceived(BangCap bangCap) {
+                // Update UI with BangCap details
+                binding.tvBangCapId.setText(bangCap.getBangcap_id());
+                binding.tvTenBang.setText(bangCap.getTenBang());
             }
 
             @Override
-            public void onEmployeeError(Exception e) {
-                Log.e("EmployeeDetail", "Error retrieving employee details", e);
+            public void onBangCapError(Exception e) {
+                Log.e("BangCapDetailActivity", "Error fetching BangCap details", e);
+                Toast.makeText(BangCapDetailActivity.this, "Error fetching details", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void toggleEditing() {
+        boolean isEditing = binding.tvTenBang.isEnabled();
+        binding.tvTenBang.setEnabled(!isEditing);
+        binding.btnDeleteCV.setVisibility(isEditing ? View.VISIBLE : View.GONE);
+        binding.btnSaveCV.setVisibility(isEditing ? View.GONE : View.VISIBLE);
+    }
+
+    private boolean areFieldsFilled() {
+        return !binding.tvTenBang.getText().toString().isEmpty();
+    }
+
+    private void saveBangCapDetails() {
+        String tenBang = binding.tvTenBang.getText().toString();
+        BangCap updatedBangCap = new BangCap(documentId, tenBang); // Ensure BangCap has the required constructor
+
+        bangcapconnet.updateBangCap(documentId, updatedBangCap, new bangcapconnet.OnOperationCompleteListener() {
+            @Override
+            public void onOperationSuccess() {
+                Toast.makeText(BangCapDetailActivity.this, "BangCap updated successfully", Toast.LENGTH_SHORT).show();
+                // Return to the previous activity and pass a result to reload data
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("reload", true);
+                setResult(RESULT_OK, resultIntent);
+                finish(); // Close activity and return to list page
+            }
+
+            @Override
+            public void onOperationError(Exception e) {
+                Log.e("BangCapDetailActivity", "Error updating BangCap", e);
+                Toast.makeText(BangCapDetailActivity.this, "Error updating BangCap", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void confirmDelete() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Deletion")
+                .setMessage("Are you sure you want to delete this BangCap?")
+                .setPositiveButton("Yes", (dialog, which) -> deleteBangCap())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void deleteBangCap() {
+        bangcapconnet.deleteBangCap(documentId, new bangcapconnet.OnOperationCompleteListener() {
+            @Override
+            public void onOperationSuccess() {
+                Toast.makeText(BangCapDetailActivity.this, "BangCap deleted successfully", Toast.LENGTH_SHORT).show();
+                // Return to the previous activity and pass a result to reload data
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("reload", true);
+                setResult(RESULT_OK, resultIntent);
+                finish(); // Close activity after deletion
+            }
+
+            @Override
+            public void onOperationError(Exception e) {
+                Log.e("BangCapDetailActivity", "Error deleting BangCap", e);
+                Toast.makeText(BangCapDetailActivity.this, "Error deleting BangCap", Toast.LENGTH_SHORT).show();
             }
         });
     }

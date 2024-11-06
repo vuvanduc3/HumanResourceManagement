@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.humanresourcemanagement.model.BangCap;
-import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -12,126 +11,112 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class firebaseconnet {
-    private static final String TAG = "EmployeeListActivity";
+public class bangcapconnet {
+    private static final String TAG = "BangCapListActivity";
     private FirebaseFirestore db;
 
-    // Constructor với Context
-    public firebaseconnet(Context context) {
-        // Khởi tạo Firebase với Context
+    // Constructor with Context
+    public bangcapconnet(Context context) {
+        // Initialize Firebase with Context
         FirebaseApp.initializeApp(context);
-
-        // Khởi tạo Firestore
+        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
     }
 
-    // Phương thức để thêm dữ liệu vào Firestore
-    public void addData() {
-        // Tạo một Map để chứa dữ liệu
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "John");
-        user.put("last", "Doe");
-        user.put("born", 1990);
-
-        // Thêm tài liệu vào collection "users"
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d("firebaseconnet", "DocumentSnapshot added with ID: " + documentReference.getId());
-                })
-                .addOnFailureListener(e -> {
-                    Log.w("firebaseconnet", "Error adding document", e);
-                });
-    }
-
-    // Phương thức để lấy danh sách nhân viên
-    public void getEmployeeList(OnEmployeeListReceivedListener listener) {
-        CollectionReference employeesRef = db.collection("employees");
-        employeesRef.get()
-                .addOnCompleteListener(task -> {
-                    List<Employee> employeeList = new ArrayList<>();
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Employee employee = document.toObject(Employee.class); // Chuyển đổi tài liệu thành đối tượng Employee
-                            employeeList.add(employee);
-                            Log.d(TAG, "getEmployeeList: " + employee.getImageUrl());
-                        }
-                        listener.onEmployeeListReceived(employeeList);
-                    } else {
-                        Log.w("FirebaseConnect", "Error getting documents.", task.getException());
-                        listener.onEmployeeListError(task.getException());
-                    }
-                });
-    }
-
-    public void getEmployeeById(String employeeId, OnEmployeeReceivedListener listener) {
-        CollectionReference employeesRef = db.collection("employees");
-        employeesRef.whereEqualTo("employeeId", employeeId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
-                        Employee employee = document.toObject(Employee.class); // Chuyển tài liệu thành đối tượng Employee
-                        listener.onEmployeeReceived(employee);
-                    } else {
-                        Log.w(TAG, "No employee found with employeeId: " + employeeId);
-                        listener.onEmployeeError(task.getException());
-                    }
-                });
-    }
-
-    // Phương thức để lấy danh sách bang cap
+    // Method to get the list of bang cap
     public void getBangCapList(OnBangCapListReceivedListener listener) {
-        CollectionReference employeesRef = db.collection("bangcap");
-        employeesRef.get()
+        CollectionReference bangcapRef = db.collection("bangcap");
+        bangcapRef.get()
                 .addOnCompleteListener(task -> {
                     List<BangCap> bangCapList = new ArrayList<>();
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            BangCap bangCap = document.toObject(BangCap.class); // Chuyển đổi tài liệu thành đối tượng Employee
+                            BangCap bangCap = document.toObject(BangCap.class);
                             bangCapList.add(bangCap);
-
                         }
                         listener.onBangCapListReceived(bangCapList);
                     } else {
-                        Log.w("FirebaseConnect", "Error getting documents.", task.getException());
+                        Log.w(TAG, "Error getting documents.", task.getException());
                         listener.onBangCapListError(task.getException());
                     }
                 });
     }
 
-    // Interface để nhận kết quả Employee
-    public interface OnEmployeeReceivedListener {
-        void onEmployeeReceived(Employee employee);
-
-        void onEmployeeError(Exception e);
+    // Method to get a single bang cap by ID
+    public void getBangCapById(String bangcap_id, OnBangCapReceivedListener listener) {
+        CollectionReference bangcapRef = db.collection("bangcap");
+        bangcapRef.whereEqualTo("bangcap_id", bangcap_id)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        BangCap bangCap = document.toObject(BangCap.class);
+                        listener.onBangCapReceived(bangCap);
+                    } else {
+                        Log.w(TAG, "No BangCap found with ID: " + bangcap_id);
+                        listener.onBangCapError(task.getException());
+                    }
+                });
     }
 
-
-    // Interface để nhận danh sách nhân viên
-    public interface OnEmployeeListReceivedListener {
-        void onEmployeeListReceived(List<Employee> employeeList);
-
-        void onEmployeeListError(Exception e);
+    // Method to add a new BangCap
+    public void addBangCap(BangCap bangCap, OnOperationCompleteListener listener) {
+        db.collection("bangcap").add(bangCap)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "BangCap added with ID: " + documentReference.getId());
+                    listener.onOperationSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error adding BangCap", e);
+                    listener.onOperationError(e);
+                });
     }
 
+    // Method to update an existing BangCap by document ID
+    public void updateBangCap(String documentId, BangCap updatedBangCap, OnOperationCompleteListener listener) {
+        db.collection("bangcap").document(documentId)
+                .set(updatedBangCap)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "BangCap successfully updated!");
+                    listener.onOperationSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error updating BangCap", e);
+                    listener.onOperationError(e);
+                });
+    }
 
-    // Interface để nhận kết quả Bang cap
+    // Method to delete a BangCap by document ID
+    public void deleteBangCap(String documentId, OnOperationCompleteListener listener) {
+        db.collection("bangcap").document(documentId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "BangCap successfully deleted!");
+                    listener.onOperationSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error deleting BangCap", e);
+                    listener.onOperationError(e);
+                });
+    }
+
+    // Interface to receive BangCap result
     public interface OnBangCapReceivedListener {
         void onBangCapReceived(BangCap bangCap);
-
-        void onBangCApError(Exception e);
+        void onBangCapError(Exception e);
     }
 
-
-    // Interface để nhận danh sách Bang cap
+    // Interface to receive list of BangCap
     public interface OnBangCapListReceivedListener {
-        void onBangCapListReceived(List<BangCap> bangCapListList);
-
+        void onBangCapListReceived(List<BangCap> bangCapList);
         void onBangCapListError(Exception e);
+    }
+
+    // Interface for operation completion callbacks
+    public interface OnOperationCompleteListener {
+        void onOperationSuccess();
+        void onOperationError(Exception e);
     }
 }

@@ -3,6 +3,7 @@ package com.example.humanresourcemanagement.firebase;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.humanresourcemanagement.model.BangCap;
 import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
@@ -83,6 +84,25 @@ public class firebaseconnet {
                 });
     }
 
+    // Phương thức để lấy danh sách bang cap
+    public void getBangCapList(OnBangCapListReceivedListener listener) {
+        CollectionReference employeesRef = db.collection("bangcap");
+        employeesRef.get()
+                .addOnCompleteListener(task -> {
+                    List<BangCap> bangCapList = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            BangCap bangCap = document.toObject(BangCap.class); // Chuyển đổi tài liệu thành đối tượng Employee
+                            bangCapList.add(bangCap);
+
+                        }
+                        listener.onBangCapListReceived(bangCapList);
+                    } else {
+                        Log.w("FirebaseConnect", "Error getting documents.", task.getException());
+                        listener.onBangCapListError(task.getException());
+                    }
+                });
+    }
 
     // Interface để nhận kết quả Employee
     public interface OnEmployeeReceivedListener {
@@ -97,5 +117,21 @@ public class firebaseconnet {
         void onEmployeeListReceived(List<Employee> employeeList);
 
         void onEmployeeListError(Exception e);
+    }
+
+
+    // Interface để nhận kết quả Bang cap
+    public interface OnBangCapReceivedListener {
+        void onBangCapReceived(BangCap bangCap);
+
+        void onBangCApError(Exception e);
+    }
+
+
+    // Interface để nhận danh sách Bang cap
+    public interface OnBangCapListReceivedListener {
+        void onBangCapListReceived(List<BangCap> bangCapListList);
+
+        void onBangCapListError(Exception e);
     }
 }

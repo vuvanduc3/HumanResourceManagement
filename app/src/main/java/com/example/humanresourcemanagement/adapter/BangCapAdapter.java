@@ -1,6 +1,5 @@
 package com.example.humanresourcemanagement.adapter;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 import com.bumptech.glide.Glide;
 import com.example.humanresourcemanagement.R;
-import com.example.humanresourcemanagement.model.Employee;
+import com.example.humanresourcemanagement.model.BangCap;
+
+import java.util.List;
 
 
-public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
+public class BangCapAdapter extends RecyclerView.Adapter<BangCapAdapter.EmployeeViewHolder> {
 
-    private List<Employee> employeeList;
+    private List<BangCap> employeeList;
     private OnItemClickListener onItemClickListener;
 
-    public EmployeeAdapter(List<Employee> employeeList) {
+    public BangCapAdapter(List<BangCap> employeeList) {
         this.employeeList = employeeList;
     }
 
@@ -38,31 +37,21 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     @NonNull
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_employee, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bangcap, parent, false);
         return new EmployeeViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeViewHolder holder, int position) {
-        Employee employee = employeeList.get(position);
-        holder.nameTextView.setText(employee.getName());
-        holder.positionTextView.setText(employee.getChucvuId());
-        String imageUrl = employee.getImageUrl();
-
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            Glide.with(holder.img.getContext())
-                    .load(imageUrl)
-                    .placeholder(R.drawable.baseline_download_for_offline_24)
-                    .error(R.drawable.baseline_error_outline_24)
-                    .into(holder.img);
-        } else {
-            holder.img.setImageResource(R.drawable.baseline_error_outline_24);
-        }
-
+        BangCap employee = employeeList.get(position);
+        holder.nameTextView.setText(employee.getBangcap_id());
+        holder.positionTextView.setText(employee.getTenBang());
+//
+//
         // Xử lý sự kiện nhấp vào item
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(employee.getEmployeeId());
+                onItemClickListener.onItemClick(employee.getBangcap_id());
             }
         });
     }
@@ -79,9 +68,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         public EmployeeViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.tvEmployeeName);
-            positionTextView = itemView.findViewById(R.id.tvEmployeeDepartment);
-            img = itemView.findViewById(R.id.ivEmployeeImage);
+            nameTextView = itemView.findViewById(R.id.tvBangCapId);
+            positionTextView = itemView.findViewById(R.id.tvTenBang);
+
         }
     }
 }

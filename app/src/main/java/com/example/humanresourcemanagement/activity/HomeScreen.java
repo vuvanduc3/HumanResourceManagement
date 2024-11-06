@@ -26,6 +26,14 @@ public class HomeScreen extends AppCompatActivity {
 
             }
         });
+        binding.lnBangCap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreen.this, BangCapListActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
 }
