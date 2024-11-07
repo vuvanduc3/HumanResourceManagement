@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class phongBanfirebase {
-    private static final String TAG = "EmployeeListActivity";
+    private static final String TAG = "Phong ban:";
     private FirebaseFirestore db;
 
     // Constructor với Context
@@ -89,6 +89,85 @@ public class phongBanfirebase {
                         listener.onPhongBanDeleteError(task.getException());
                     }
                 });
+    }
+
+
+    public void updatePhongBanById(String maPhongBan, PhongBan updatedPhongBan, OnPhongBanUpdateListener listener) {
+        CollectionReference phongbanRef = db.collection("phongban");
+        phongbanRef.whereEqualTo("maPhongBan", maPhongBan)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        // Lấy tài liệu đầu tiên và cập nhật nó
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        phongbanRef.document(document.getId()).set(updatedPhongBan)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "PhongBan successfully updated!");
+                                    listener.onPhongBanUpdated();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w(TAG, "Error updating phongban", e);
+                                    listener.onPhongBanUpdateError(e);
+                                });
+                    } else {
+                        Log.w(TAG, "No phongban found with maPhongBan: " + maPhongBan);
+                        listener.onPhongBanUpdateError(task.getException());
+                    }
+                });
+    }
+
+    public void updateEmployeeDetails(String employeeId, String newChucVuId, String newPhongBanId, OnEmployeeUpdateListener listener) {
+        // Tạo một Map để chứa các trường cần cập nhật
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("chucvuId", newChucVuId);
+        updates.put("phongbanId", newPhongBanId);
+
+        db.collection("employees")
+                .document(employeeId) // Document ID của nhân viên
+                .update(updates) // Cập nhật nhiều trường
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Employee details successfully updated!");
+                    listener.onEmployeeUpdated();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error updating employee details", e);
+                    listener.onEmployeeUpdateError(e);
+                });
+    }
+
+
+    // Phương thức để thêm phòng ban
+    public void addPhongBan(PhongBan phongBan, OnPhongBanAddedListener listener) {
+        // Sử dụng maPhongBan làm ID tài liệu
+        db.collection("phongban")
+                .document(phongBan.getMaPhongBan()) // ID tài liệu là maPhongBan
+                .set(phongBan) // Sử dụng phương thức set để thêm hoặc ghi đè dữ liệu
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "PhongBan added with ID: " + phongBan.getMaPhongBan());
+                    listener.onPhongBanAdded();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error adding PhongBan", e);
+                    listener.onPhongBanAddError(e);
+                });
+    }
+    // Interface để nhận kết quả khi thêm phòng ban
+    public interface OnPhongBanAddedListener {
+        void onPhongBanAdded();
+        void onPhongBanAddError(Exception e);
+    }
+
+
+    // Interface để nhận kết quả cập nhật nhân viên
+    public interface OnEmployeeUpdateListener {
+        void onEmployeeUpdated();
+        void onEmployeeUpdateError(Exception e);
+    }
+
+    // Interface để nhận kết quả cập nhật PhongBan
+    public interface OnPhongBanUpdateListener {
+        void onPhongBanUpdated();
+        void onPhongBanUpdateError(Exception e);
     }
 
     // Interface để nhận kết quả xóa PhongBan

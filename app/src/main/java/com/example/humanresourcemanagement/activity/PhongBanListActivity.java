@@ -63,6 +63,14 @@ public class PhongBanListActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PhongBanListActivity.this, ThemPhongBanActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 

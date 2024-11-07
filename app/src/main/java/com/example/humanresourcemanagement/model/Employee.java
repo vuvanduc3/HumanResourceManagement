@@ -57,5 +57,10 @@ public class Employee {
     public String getPhongbanId() { return phongbanId; }
     public String getSdt() { return sdt; }
     public String getTrangthai() { return trangthai; }
+
+    @Override
+    public String toString() {
+        return employeeId+'-'+ name; // Trả về tên để hiển thị trong Spinner
+    }
 }
 
