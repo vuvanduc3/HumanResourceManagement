@@ -34,6 +34,13 @@ public class HomeScreen extends AppCompatActivity {
 
             }
         });
+        binding.lnSkill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreen.this, SkillListActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

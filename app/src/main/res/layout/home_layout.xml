@@ -380,6 +380,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:layout_margin="5dp"
+                android:id="@+id/lnSkill"
                 android:padding="8dp">
 
                 <ImageView
