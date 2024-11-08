@@ -52,8 +52,7 @@ public class SkillListActivity extends AppCompatActivity {
 
         skillconnet = new skillconnet(this);
         binding.btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(SkillListActivity.this, HomeScreen.class);
-            startActivity(intent);
+          finish();
         });
 
         binding.btnThem.setOnClickListener(v -> {

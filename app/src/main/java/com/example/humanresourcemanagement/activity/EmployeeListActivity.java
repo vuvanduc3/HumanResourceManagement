@@ -45,6 +45,8 @@ public class EmployeeListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        
+
         // Khởi tạo FirebaseConnect
         firebaseConnection = new firebaseconnet(this);
 
