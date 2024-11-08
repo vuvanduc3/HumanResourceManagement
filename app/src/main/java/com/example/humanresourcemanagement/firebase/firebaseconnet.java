@@ -250,18 +250,5 @@ public class firebaseconnet {
     }
 
 
-    // Interface để nhận kết quả Bang cap
-    public interface OnBangCapReceivedListener {
-        void onBangCapReceived(BangCap bangCap);
 
-        void onBangCApError(Exception e);
-    }
-
-
-    // Interface để nhận danh sách Bang cap
-    public interface OnBangCapListReceivedListener {
-        void onBangCapListReceived(List<BangCap> bangCapListList);
-
-        void onBangCapListError(Exception e);
-    }
 }

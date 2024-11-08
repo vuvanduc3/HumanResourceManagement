@@ -34,14 +34,22 @@ public class HomeScreen extends AppCompatActivity {
 
             }
         });
+        binding.lnBangCap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreen.this, BangCapListActivity.class);
+                startActivity(intent);
+
+            }
+        });
         binding.lnSkill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeScreen.this, ChucVuActivity.class);
+                Intent intent = new Intent(HomeScreen.this, SkillListActivity.class);
                 startActivity(intent);
             }
         });
->>>>>>> 6.huy_skills
+
     }
 
 }
