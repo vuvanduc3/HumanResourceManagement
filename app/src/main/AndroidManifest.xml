@@ -29,6 +29,10 @@
             android:name=".activity.MainActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".activity.Login"
+            android:exported="true">
+        </activity>
 
         <activity
             android:name=".activity.BangCapDetailActivity"

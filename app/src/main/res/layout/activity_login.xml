@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="XXX-XXXX-XXX"
-        android:inputType="phone"
+
         android:layout_marginTop="24dp"
 android:layout_marginBottom="10dp"
         android:padding="12dp"
@@ -51,7 +51,7 @@ android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="XXX"
-        android:inputType="number"
+
         android:layout_marginTop="16dp"
 
         android:padding="12dp"

@@ -154,7 +154,7 @@ public class PhongBanDetailActivity extends AppCompatActivity {
     private void huyEdit() {
         // Cho phép chỉnh sửa tên phòng ban
         binding.tvTenPB.setEnabled(false);
-
+        Log.d("ma quan ly", "huyEdit: "+maQuanLy);
 
         binding.tvTenTP.setVisibility(View.VISIBLE);
         binding.btnDelete.setVisibility(View.VISIBLE);
@@ -220,9 +220,10 @@ public class PhongBanDetailActivity extends AppCompatActivity {
         updatedPhongBan.setMaPhongBan(maPhongBan);
         updatedPhongBan.setTenPhongBan(tenPhongBan);
         if (selectedEmployee != null) {
-            if (selectedEmployee.getEmployeeId() != maQuanLy) {
-                updatedPhongBan.setMaQuanLy(selectedEmployee.getEmployeeId());
-            }
+
+            updatedPhongBan.setMaQuanLy(selectedEmployee.getEmployeeId());
+        } else {
+            updatedPhongBan.setMaQuanLy(maQuanLy);
         }
 
 
@@ -242,23 +243,22 @@ public class PhongBanDetailActivity extends AppCompatActivity {
             }
         });
 
-        if (selectedEmployee!=null && selectedEmployee.getEmployeeId() != null) {
+        if (selectedEmployee != null && selectedEmployee.getEmployeeId() != null) {
 
-          if(maQuanLy!=null)
-          {
-              phongBanfirebase.updateEmployeeDetails(maQuanLy, "NV", maPhongBan, new phongBanfirebase.OnEmployeeUpdateListener() {
-                  @Override
-                  public void onEmployeeUpdated() {
-                  }
+            if (maQuanLy != null && maQuanLy != "") {
+                phongBanfirebase.updateEmployeeDetails(maQuanLy, "NV", maPhongBan, new phongBanfirebase.OnEmployeeUpdateListener() {
+                    @Override
+                    public void onEmployeeUpdated() {
+                    }
 
-                  @Override
-                  public void onEmployeeUpdateError(Exception e) {
-                      Log.e("PhongBanDetail", "Error updating employee chucVuId", e);
-                      Toast.makeText(PhongBanDetailActivity.this, "Có lỗi xảy ra khi cập nhật chức vụ nhân viên.", Toast.LENGTH_SHORT).show();
-                  }
-              });
+                    @Override
+                    public void onEmployeeUpdateError(Exception e) {
+                        Log.e("PhongBanDetail", "Error updating employee chucVuId", e);
+                        Toast.makeText(PhongBanDetailActivity.this, "Có lỗi xảy ra khi cập nhật chức vụ nhân viên.", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-          }
+            }
             // Cập nhật chức vụ cho trưởng phòng
             phongBanfirebase.updateEmployeeDetails(selectedEmployee.getEmployeeId(), "TP", maPhongBan, new phongBanfirebase.OnEmployeeUpdateListener() {
                 @Override
@@ -274,6 +274,6 @@ public class PhongBanDetailActivity extends AppCompatActivity {
         }
 
     }
-
-
 }
+
+

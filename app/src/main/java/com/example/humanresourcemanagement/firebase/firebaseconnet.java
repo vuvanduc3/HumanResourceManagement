@@ -213,6 +213,33 @@ public class firebaseconnet {
                 });
     }
 
+    public void login(String employeeId, String matKhau, OnLoginListener listener) {
+        db.collection("employees")
+                .whereEqualTo("employeeId", employeeId)
+                .whereEqualTo("matKhau", matKhau)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        Employee employee = document.toObject(Employee.class);
+
+                        // Kiểm tra phân quyền dựa trên chucvuId
+                        String chucvuId = employee.getChucvuId();
+                        if ("GD".equals(chucvuId)) {
+                            listener.onLoginSuccess(employee, "GD");
+                        } else if ("TP".equals(chucvuId)) {
+                            listener.onLoginSuccess(employee, "TP");
+                        } else {
+                            listener.onLoginSuccess(employee, "OTHER");
+                        }
+                    } else {
+                        listener.onLoginError(new Exception("Login failed: Invalid employeeId or password"));
+                    }
+                });
+    }
+
+
+
     // Interface để nhận kết quả từ Firebase
     public interface OnEmployeeListReceivedListener {
         void onEmployeeListReceived(List<Employee> employeeList);
@@ -248,7 +275,10 @@ public class firebaseconnet {
         void onChucVuDeleted();
         void onChucVuDeleteError(Exception e);
     }
-
+    public interface OnLoginListener {
+        void onLoginSuccess(Employee employee, String role);
+        void onLoginError(Exception e);
+    }
 
 
 }
