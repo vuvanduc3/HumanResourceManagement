@@ -11,6 +11,7 @@ import com.example.humanresourcemanagement.R;
 import com.example.humanresourcemanagement.Fragment.HomeFragment;
 import com.example.humanresourcemanagement.Fragment.MenuProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.humanresourcemanagement.Fragment.MenuProfileFragment;
 
 import com.example.humanresourcemanagement.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
