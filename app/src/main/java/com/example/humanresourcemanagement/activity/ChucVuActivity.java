@@ -58,7 +58,9 @@ public class ChucVuActivity extends AppCompatActivity {
 
         // Tải dữ liệu chức vụ từ Firebase
         loadChucVuData();
-
+        binding.btnBack.setOnClickListener(v ->{
+            finish();
+        });
         binding.tvAddd.setOnClickListener(view -> {
             // Tạo một AlertDialog với TextInputLayout cho các EditText
             AlertDialog.Builder builder = new AlertDialog.Builder(ChucVuActivity.this);

@@ -31,7 +31,9 @@ public class EmployeeDetailActivity extends AppCompatActivity {
 
         // Gọi hàm lấy thông tin nhân viên
         getEmployeeDetails(employeeId);
-
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
         binding.tvEditNV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

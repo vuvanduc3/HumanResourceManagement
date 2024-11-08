@@ -31,7 +31,9 @@ public class EmployeeEditActivity extends AppCompatActivity {
 
         // Gọi hàm lấy thông tin nhân viên
         getEmployeeDetails(employeeId);
-
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
         // Lắng nghe sự kiện khi người dùng nhấn nút Lưu
         binding.buttonSave.setOnClickListener(view -> {
             // Gọi hàm cập nhật thông tin nhân viên
