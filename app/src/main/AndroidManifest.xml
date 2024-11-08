@@ -15,9 +15,7 @@
         <activity
             android:name=".activity.EmployeeEditActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.EditChucVuActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activity.ChucVuDetailActivity"
             android:exported="false" />

@@ -1,0 +1,72 @@
+<!-- activity_login.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    tools:context=".activity.Login">
+
+    <!-- Title -->
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your User"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="80dp"/>
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/subtitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your mobile number to start using Gastos App."
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Phone Number Input -->
+    <EditText
+        android:id="@+id/phoneNumberInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="XXX-XXXX-XXX"
+        android:inputType="phone"
+        android:layout_marginTop="24dp"
+android:layout_marginBottom="10dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext"/>
+
+    <!-- Code Input -->
+    <EditText
+        android:id="@+id/codeInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="XXX"
+        android:inputType="number"
+        android:layout_marginTop="16dp"
+
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext"/>
+
+    <!-- Continue Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue ➔"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:layout_marginTop="320dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_button"/>
+
+</LinearLayout>
