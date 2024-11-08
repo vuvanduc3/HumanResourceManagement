@@ -51,8 +51,7 @@ public class SkillDetailActivity extends AppCompatActivity {
 
         // Handle Back button click
         binding.btnBack.setOnClickListener(view -> {
-            Intent intent = new Intent(SkillDetailActivity.this, SkillListActivity.class);
-            startActivity(intent);
+          finish();
         });
     }
 
