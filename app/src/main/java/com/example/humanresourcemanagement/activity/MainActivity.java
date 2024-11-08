@@ -2,23 +2,23 @@ package com.example.humanresourcemanagement.activity;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import com.example.humanresourcemanagement.firebase.firebaseconnet;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.Flagment.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.bottom_layout);
+        setContentView(R.layout.bottom_layout); // Activity layout của bạn
 
-
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            HomeFragment homeFragment = new HomeFragment();
+            transaction.replace(R.id.frameLayout, homeFragment); // fragment_container là ID của ViewGroup bạn đã thêm để chứa fragment
+            transaction.commit();
+        }
     }
 }

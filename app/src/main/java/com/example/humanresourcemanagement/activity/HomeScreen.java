@@ -18,6 +18,8 @@ public class HomeScreen extends AppCompatActivity {
         binding = HomeLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
         binding.lnNhanVien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
