@@ -91,24 +91,44 @@ public class phongBanfirebase {
                 });
     }
 
-
     public void updatePhongBanById(String maPhongBan, PhongBan updatedPhongBan, OnPhongBanUpdateListener listener) {
         CollectionReference phongbanRef = db.collection("phongban");
         phongbanRef.whereEqualTo("maPhongBan", maPhongBan)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        // Lấy tài liệu đầu tiên và cập nhật nó
                         DocumentSnapshot document = task.getResult().getDocuments().get(0);
-                        phongbanRef.document(document.getId()).set(updatedPhongBan)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d(TAG, "PhongBan successfully updated!");
-                                    listener.onPhongBanUpdated();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.w(TAG, "Error updating phongban", e);
-                                    listener.onPhongBanUpdateError(e);
-                                });
+
+                        // Lấy tài liệu hiện tại
+                        PhongBan currentPhongBan = document.toObject(PhongBan.class);
+
+                        // Tạo một Map để chứa các trường cần cập nhật
+                        Map<String, Object> updates = new HashMap<>();
+
+                        // So sánh và thêm các trường thay đổi vào Map
+                        if (currentPhongBan.getTenPhongBan() != null && !currentPhongBan.getTenPhongBan().equals(updatedPhongBan.getTenPhongBan())) {
+                            updates.put("tenPhongBan", updatedPhongBan.getTenPhongBan());
+                        }
+                        if (currentPhongBan.getMaQuanLy() != null && !currentPhongBan.getMaQuanLy().equals(updatedPhongBan.getMaQuanLy())) {
+                            updates.put("maQuanLy", updatedPhongBan.getMaQuanLy());
+                        }
+                        // Thêm các trường khác nếu cần
+
+                        if (!updates.isEmpty()) {
+                            // Cập nhật các trường thay đổi
+                            phongbanRef.document(document.getId()).update(updates)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d(TAG, "PhongBan successfully updated!");
+                                        listener.onPhongBanUpdated();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.w(TAG, "Error updating phongban", e);
+                                        listener.onPhongBanUpdateError(e);
+                                    });
+                        } else {
+                            Log.d(TAG, "No changes detected. PhongBan not updated.");
+                            listener.onPhongBanUpdated(); // Hoặc tùy chọn khác nếu không có thay đổi
+                        }
                     } else {
                         Log.w(TAG, "No phongban found with maPhongBan: " + maPhongBan);
                         listener.onPhongBanUpdateError(task.getException());

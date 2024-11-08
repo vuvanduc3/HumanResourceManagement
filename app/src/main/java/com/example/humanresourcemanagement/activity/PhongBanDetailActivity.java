@@ -131,16 +131,6 @@ public class PhongBanDetailActivity extends AppCompatActivity {
         employeeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, employeeList);
         employeeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerTruongPhong.setAdapter(employeeAdapter);
-
-        // Chọn mục mặc định dựa trên maQuanLy
-        if (!employeeList.isEmpty() && maQuanLy != null && !maQuanLy.isEmpty()) {
-            for (int i = 0; i < employeeList.size(); i++) {
-                if (employeeList.get(i).getEmployeeId().equals(maQuanLy)) { // Giả sử bạn có phương thức getId() để lấy ID
-                    binding.spinnerTruongPhong.setSelection(i); // Chọn nhân viên tương ứng
-                    break;
-                }
-            }
-        }
     }
 
     private void enableEditMode() {
@@ -229,8 +219,10 @@ public class PhongBanDetailActivity extends AppCompatActivity {
         PhongBan updatedPhongBan = new PhongBan();
         updatedPhongBan.setMaPhongBan(maPhongBan);
         updatedPhongBan.setTenPhongBan(tenPhongBan);
-        if (selectedEmployee.getEmployeeId() != null) {
-            updatedPhongBan.setMaQuanLy(selectedEmployee.getEmployeeId());
+        if (selectedEmployee != null) {
+            if (selectedEmployee.getEmployeeId() != maQuanLy) {
+                updatedPhongBan.setMaQuanLy(selectedEmployee.getEmployeeId());
+            }
         }
 
 
@@ -250,7 +242,7 @@ public class PhongBanDetailActivity extends AppCompatActivity {
             }
         });
 
-        if (selectedEmployee.getEmployeeId() != null) {
+        if (selectedEmployee!=null && selectedEmployee.getEmployeeId() != null) {
 
           if(maQuanLy!=null)
           {
