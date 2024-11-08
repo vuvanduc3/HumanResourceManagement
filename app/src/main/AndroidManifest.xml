@@ -75,6 +75,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Các Activity khác trong ứng dụng -->
+        <activity
+            android:name=".activity.NotificeScreen"
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.EmployeeDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.EmployeeListActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

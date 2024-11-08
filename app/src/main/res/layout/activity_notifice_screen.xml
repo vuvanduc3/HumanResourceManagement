@@ -1,0 +1,28 @@
+<!-- activity_notifice_screen.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Tiêu đề Thông báo -->
+    <TextView
+        android:id="@+id/tvThongBaoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thông Báo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        />
+    <!-- ListView để hiển thị danh sách thông báo -->
+    <ListView
+        android:id="@+id/listViewNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvThongBaoTitle"
+        android:padding="15dp"
+        android:dividerHeight="10dp"
+        android:divider="@android:color/transparent"
+         />
+</RelativeLayout>
