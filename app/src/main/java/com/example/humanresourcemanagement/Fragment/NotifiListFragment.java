@@ -1,66 +1,90 @@
 package com.example.humanresourcemanagement.Fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.adapter.ThongBaoAdapter;
+import com.example.humanresourcemanagement.model.ThongBao;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotifiListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class NotifiListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private ListView listView;
+    private ThongBaoAdapter adapter;
+    private List<ThongBao> thongBaoList;
+    private FirebaseFirestore db;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public NotifiListFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotifiListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotifiListFragment newInstance(String param1, String param2) {
-        NotifiListFragment fragment = new NotifiListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate layout cho fragment
+        View view = inflater.inflate(R.layout.activity_notifice_screen, container, false);
+
+        // Khởi tạo view và Firebase Firestore
+        listView = view.findViewById(R.id.listViewNotifications);
+        db = FirebaseFirestore.getInstance();
+
+        thongBaoList = new ArrayList<>();
+        adapter = new ThongBaoAdapter(getContext(), thongBaoList); // Thay 'this' bằng 'getContext()'
+        listView.setAdapter(adapter);
+
+        // Thêm 3 thông báo tĩnh
+        addStaticData();
+
+        // Lấy danh sách thông báo từ Firebase
+        loadThongBaoFromFirebase();
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifi_list, container, false);
+    // Phương thức để lấy danh sách thông báo từ Firebase
+    private void loadThongBaoFromFirebase() {
+        CollectionReference thongBaoRef = db.collection("thongbao");
+
+        thongBaoRef.get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null) {
+                            // Lặp qua kết quả Firestore và thêm vào danh sách
+                            for (DocumentSnapshot document : querySnapshot) {
+                                // Chuyển tài liệu Firestore thành đối tượng ThongBao
+                                ThongBao thongBao = document.toObject(ThongBao.class);
+                                thongBao.setMaThongBao(document.getId()); // Lấy ID từ Firestore và gán vào đối tượng
+                                thongBaoList.add(thongBao);
+                            }
+
+                            // Cập nhật adapter để hiển thị dữ liệu
+                            adapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Error getting documents.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    // Thêm 3 dữ liệu tĩnh vào danh sách thông báo
+    private void addStaticData() {
+        thongBaoList.add(new ThongBao("1", "NV001", "Thông báo", "Họp về Push notification React Native", "2022-10-16", "Chưa đọc"));
+        thongBaoList.add(new ThongBao("2", "NV002", "Thông báo", "Thông báo khác", "2022-10-17", "Đã đọc"));
+        thongBaoList.add(new ThongBao("3", "NV003", "Thông báo", "Thông báo mới cập nhật", "2024-10-15", "Chưa đọc"));
+
+        // Cập nhật lại adapter sau khi thêm dữ liệu
+        adapter.notifyDataSetChanged();
     }
 }

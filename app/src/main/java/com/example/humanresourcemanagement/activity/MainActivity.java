@@ -7,14 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.humanresourcemanagement.Fragment.MenuProfileFragment;
+import com.example.humanresourcemanagement.Fragment.NotifiListFragment;
 import com.example.humanresourcemanagement.R;
 import com.example.humanresourcemanagement.Fragment.HomeFragment;
-import com.example.humanresourcemanagement.Fragment.MenuProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.humanresourcemanagement.Fragment.MenuProfileFragment;
-
 import com.example.humanresourcemanagement.databinding.ActivityMainBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
             } else if (item.getItemId() == R.id.nav_notify) {
-                selectedFragment = new MenuProfileFragment();
+                selectedFragment = new NotifiListFragment();
             } else if (item.getItemId() == R.id.nav_profile) {
                 selectedFragment = new MenuProfileFragment();
             }

@@ -55,13 +55,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.lnThongBao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NotificeScreen.class);
-                startActivity(intent);
-            }
-        });
+
 
         binding.lnSkill.setOnClickListener(new View.OnClickListener() {
             @Override
