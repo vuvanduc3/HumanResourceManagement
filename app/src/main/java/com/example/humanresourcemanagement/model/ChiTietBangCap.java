@@ -3,95 +3,84 @@ package com.example.humanresourcemanagement.model;
 import java.util.Date;
 
 public class ChiTietBangCap {
-    private int id;
-    private String loaiBangCap;
-    private Date ngayCap;
-    private String maNhanVien;
-    private String hinhAnh;
-    private boolean xacThuc;
-    private String moTa;
+    private String bangcap_id; // Thay đổi từ int sang String để tương thích với Firebase
+    private String employeeId; // employeeId trong Firebase
+    private String imageUrl; // imageUrl trong Firebase
+    private String mota; // mota trong Firebase
+    private String ngaycap; // ngaycap trong Firebase
+    private String xacthuc; // xacthuc trong Firebase
 
     // Constructor
-    public ChiTietBangCap(int id, String loaiBangCap, Date ngayCap, String maNhanVien, String hinhAnh, boolean xacThuc, String moTa) {
-        this.id = id;
-        this.loaiBangCap = loaiBangCap;
-        this.ngayCap = ngayCap;
-        this.maNhanVien = maNhanVien;
-        this.hinhAnh = hinhAnh;
-        this.xacThuc = xacThuc;
-        this.moTa = moTa;
+    public ChiTietBangCap(String bangcap_id, String employeeId, String imageUrl, String mota, String ngaycap, String xacthuc) {
+        this.bangcap_id = bangcap_id;
+        this.employeeId = employeeId;
+        this.imageUrl = imageUrl;
+        this.mota = mota;
+        this.ngaycap = ngaycap;
+        this.xacthuc = xacthuc;
     }
 
     public ChiTietBangCap() {
     }
 
     // Getters và Setters cho các thuộc tính
-    public int getId() {
-        return id;
+    public String getBangcap_id() {
+        return bangcap_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBangcap_id(String bangcap_id) {
+        this.bangcap_id = bangcap_id;
     }
 
-    public String getLoaiBangCap() {
-        return loaiBangCap;
+    public String getEmployeeId() {
+        return employeeId;
     }
 
-    public void setLoaiBangCap(String loaiBangCap) {
-        this.loaiBangCap = loaiBangCap;
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public Date getNgayCap() {
-        return ngayCap;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setNgayCap(Date ngayCap) {
-        this.ngayCap = ngayCap;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getMaNhanVien() {
-        return maNhanVien;
+    public String getMota() {
+        return mota;
     }
 
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
+    public void setMota(String mota) {
+        this.mota = mota;
     }
 
-    public String getHinhAnh() {
-        return hinhAnh;
+    public String  getNgaycap() {
+        return ngaycap;
     }
 
-    public void setHinhAnh(String hinhAnh) {
-        this.hinhAnh = hinhAnh;
+    public void setNgaycap(String ngaycap) {
+        this.ngaycap = ngaycap;
     }
 
-    public boolean isXacThuc() {
-        return xacThuc;
+    public String isXacthuc() {
+        return xacthuc;
     }
 
-    public void setXacThuc(boolean xacThuc) {
-        this.xacThuc = xacThuc;
-    }
-
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
+    public void setXacthuc(String xacthuc) {
+        this.xacthuc = xacthuc;
     }
 
     // Phương thức trả về chi tiết bằng cấp
     public String getChiTietBangCapDetails() {
-        return "ID: " + id + ", Loại bằng cấp: " + loaiBangCap + ", Ngày cấp: " + ngayCap +
-                ", Mã nhân viên: " + maNhanVien + ", Hình ảnh: " + hinhAnh +
-                ", Xác thực: " + xacThuc + ", Mô tả: " + moTa;
+        return "Mã bằng cấp: " + bangcap_id + ", Mã nhân viên: " + employeeId + ", Ngày cấp: " + ngaycap +
+                ", Xác thực: " + xacthuc + ", Mô tả: " + mota + ", Hình ảnh: " + imageUrl;
     }
 
     // Ghi đè phương thức toString
     @Override
     public String toString() {
-        return "Bằng cấp: " + loaiBangCap + " - Nhân viên: " + maNhanVien;
+        return "Bằng cấp ID: " + bangcap_id + " - Nhân viên: " + employeeId;
     }
 }

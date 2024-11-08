@@ -2,15 +2,15 @@ package com.example.humanresourcemanagement.model;
 
 public class ChiTietSkill {
     private int id;
-    private String maNhanVien;
-    private String maSkill;
+    private String employeeId;
+    private String mask;
     private String moTa;
 
     // Constructor
-    public ChiTietSkill(int id, String maNhanVien, String maSkill, String moTa) {
+    public ChiTietSkill(int id, String employeeId, String mask, String moTa) {
         this.id = id;
-        this.maNhanVien = maNhanVien;
-        this.maSkill = maSkill;
+        this.employeeId = employeeId;
+        this.mask = mask;
         this.moTa = moTa;
     }
 
@@ -26,20 +26,20 @@ public class ChiTietSkill {
         this.id = id;
     }
 
-    public String getMaNhanVien() {
-        return maNhanVien;
+    public String getEmployeeId() {
+        return employeeId;
     }
 
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public String getMaSkill() {
-        return maSkill;
+    public String getMask() {
+        return mask;
     }
 
-    public void setMaSkill(String maSkill) {
-        this.maSkill = maSkill;
+    public void setMask(String mask) {
+        this.mask = mask;
     }
 
     public String getMoTa() {
@@ -52,12 +52,12 @@ public class ChiTietSkill {
 
     // Phương thức trả về chi tiết kỹ năng
     public String getChiTietSkillDetails() {
-        return "ID: " + id + ", Mã nhân viên: " + maNhanVien + ", Mã kỹ năng: " + maSkill + ", Mô tả: " + moTa;
+        return "ID: " + id + ", Mã nhân viên: " + employeeId + ", Mã kỹ năng: " + mask + ", Mô tả: " + moTa;
     }
 
     // Ghi đè phương thức toString
     @Override
     public String toString() {
-        return "Kỹ năng ID: " + maSkill + " - Nhân viên: " + maNhanVien;
+        return "Kỹ năng ID: " + mask + " - Nhân viên: " + employeeId;
     }
 }
