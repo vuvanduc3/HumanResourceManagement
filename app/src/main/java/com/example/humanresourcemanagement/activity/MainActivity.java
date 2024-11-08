@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.humanresourcemanagement.R;
-import com.example.humanresourcemanagement.Flagment.HomeFragment;
+import com.example.humanresourcemanagement.Fragment.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     @Override
