@@ -37,6 +37,9 @@ public class ChucVuDetailActivity extends AppCompatActivity {
             Log.e(TAG, "No chucvu_id found in intent.");
         }
 
+        binding.btnBack.setOnClickListener(v->{
+            finish();
+        });
         binding.btnEditCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

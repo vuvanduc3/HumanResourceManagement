@@ -50,8 +50,7 @@ public class BangCapDetailActivity extends AppCompatActivity {
 
         // Handle Back button click
         binding.btnBack.setOnClickListener(view -> {
-            Intent intent = new Intent(BangCapDetailActivity.this, BangCapListActivity.class);
-            startActivity(intent);
+          finish();
         });
     }
 

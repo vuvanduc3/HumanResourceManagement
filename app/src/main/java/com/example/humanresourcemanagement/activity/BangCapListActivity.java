@@ -53,8 +53,7 @@ public class BangCapListActivity extends AppCompatActivity {
 
         bangcapconnet = new bangcapconnet(this);
         binding.btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(BangCapListActivity.this, HomeScreen.class);
-            startActivity(intent);
+            finish();
         });
 
         binding.btnThem.setOnClickListener(v -> {

@@ -2,132 +2,153 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.EmployeeEditActivity">
+
     <LinearLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- ImageView for Profile Picture -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/profileImageView"
-            android:layout_width="380dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/profile_image"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="16dp"
-            app:shapeAppearanceOverlay="@style/RoundedImageShape" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
 
-        <!-- EditText fields for each Employee attribute -->
-        <EditText
-            android:id="@+id/editTextName"
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="Chỉnh sửa nhân viên"
+                android:textStyle="bold"
+                android:textSize="25sp"/>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:hint="Name" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/editTextCCCD"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="CCCD"
-            android:padding="16dp"
-            />
+            <!-- ImageView for Profile Picture -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/profile_image"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="16dp"
+                app:shapeAppearanceOverlay="@style/RoundedImageShape" />
 
-        <EditText
-            android:id="@+id/editTextChucVuId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Chuc Vu ID"
-            android:padding="16dp"
-            />
+            <!-- EditText fields for each Employee attribute -->
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextDiaChi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Dia Chi"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextCCCD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CCCD"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextEmployeeId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Employee ID"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextChucVuId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Chức Vụ ID"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextGioiTinh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Gioi Tinh"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextDiaChi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Địa Chỉ"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextLuongCoBan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Luong Co Ban"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextEmployeeId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Employee ID"
+                android:padding="12dp" />
 
+            <EditText
+                android:id="@+id/editTextGioiTinh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Giới Tính"
+                android:padding="12dp" />
 
+            <EditText
+                android:id="@+id/editTextLuongCoBan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Lương Cơ Bản"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextNgayBatDau"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ngay Bat Dau"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextNgayBatDau"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ngày Bắt Đầu"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextNgaySinh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ngay Sinh"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextNgaySinh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ngày Sinh"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextPhongBanId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Phong Ban ID"
-            android:enabled="false"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextPhongBanId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phòng Ban ID"
+                android:padding="12dp"
+                android:enabled="false" />
 
-        <EditText
-            android:id="@+id/editTextSDT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="SDT"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextSDT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="SĐT"
+                android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/editTextTrangThai"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Trang Thai"
-            android:padding="16dp"
-            />
+            <EditText
+                android:id="@+id/editTextTrangThai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Trạng Thái"
+                android:padding="12dp" />
 
-        <!-- Button for saving changes -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save" />
+            <!-- Button for saving changes -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Save"
+
+                android:backgroundTint="#00F01C" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

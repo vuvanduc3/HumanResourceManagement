@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.humanresourcemanagement.adapter.EmployeeAdapter;
 
+import com.example.humanresourcemanagement.databinding.ActivityBangcapBinding;
+import com.example.humanresourcemanagement.databinding.ActivityEmployeeListBinding;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
 import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,6 +27,7 @@ public class EmployeeListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewEmployees;
     private EmployeeAdapter employeeAdapter;
+    private ActivityEmployeeListBinding binding;
     private List<Employee> employeeList = new ArrayList<>(); // Sử dụng kiểu Employee thay vì Map
     private firebaseconnet firebaseConnection; // Sửa tên lớp
 
@@ -32,6 +35,9 @@ public class EmployeeListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_list);
+
+        binding = ActivityEmployeeListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         recyclerViewEmployees = findViewById(R.id.recyclerViewEmployees);
         recyclerViewEmployees.setLayoutManager(new LinearLayoutManager(this));
@@ -45,9 +51,13 @@ public class EmployeeListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        
+
         // Khởi tạo FirebaseConnect
         firebaseConnection = new firebaseconnet(this);
-
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
         // Lấy danh sách nhân viên
         loadEmployeeData();
     }
