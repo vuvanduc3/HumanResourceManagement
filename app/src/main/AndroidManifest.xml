@@ -12,17 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HumanResourceManagement"
         tools:targetApi="31">
-        <activity
-            android:name=".activity.EmployeeDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".activity.EmployeeListActivity"
-            android:exported="true">
 
-        </activity>
+        <!-- HomeScreen sẽ là màn hình khởi động chính -->
         <activity
             android:name=".activity.HomeScreen"
             android:exported="true">
@@ -31,6 +22,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Các Activity khác trong ứng dụng -->
+        <activity
+            android:name=".activity.NotificeScreen"
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.EmployeeDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.EmployeeListActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

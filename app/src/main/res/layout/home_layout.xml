@@ -263,13 +263,13 @@
 
             <!-- Notifications Button -->
             <LinearLayout
+                android:id="@+id/lnThongBao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_margin="5dp"
-                android:clickable="true"
                 android:gravity="center"
+                android:clickable="true"
                 android:padding="8dp">
 
                 <ImageView
@@ -284,6 +284,7 @@
                     android:textSize="14sp"
                     android:textColor="#000000" />
             </LinearLayout>
+
 
             <!-- Department Button -->
             <LinearLayout
