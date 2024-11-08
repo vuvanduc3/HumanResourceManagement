@@ -1,7 +1,10 @@
 package com.example.humanresourcemanagement.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.humanresourcemanagement.R;
 import com.example.humanresourcemanagement.databinding.ActivityEmployeeDetailBinding;
@@ -28,6 +31,15 @@ public class EmployeeDetailActivity extends AppCompatActivity {
 
         // Gọi hàm lấy thông tin nhân viên
         getEmployeeDetails(employeeId);
+
+        binding.tvEditNV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmployeeDetailActivity.this, EmployeeEditActivity.class);
+                intent.putExtra("employeeId", employeeId);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getEmployeeDetails(String employeeId) {

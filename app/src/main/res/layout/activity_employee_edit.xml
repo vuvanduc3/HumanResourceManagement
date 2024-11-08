@@ -1,10 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmployeeEditActivity">
+    tools:context=".activity.EmployeeEditActivity">
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- ImageView for Profile Picture -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="380dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/profile_image"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"
+            app:shapeAppearanceOverlay="@style/RoundedImageShape" />
+
+        <!-- EditText fields for each Employee attribute -->
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:hint="Name" />
+
+        <EditText
+            android:id="@+id/editTextCCCD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="CCCD"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextChucVuId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Chuc Vu ID"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextDiaChi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dia Chi"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextEmployeeId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Employee ID"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextGioiTinh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Gioi Tinh"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextLuongCoBan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Luong Co Ban"
+            android:padding="16dp"
+            />
+
+
+
+        <EditText
+            android:id="@+id/editTextNgayBatDau"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ngay Bat Dau"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextNgaySinh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ngay Sinh"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextPhongBanId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phong Ban ID"
+            android:enabled="false"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextSDT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="SDT"
+            android:padding="16dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextTrangThai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Trang Thai"
+            android:padding="16dp"
+            />
+
+        <!-- Button for saving changes -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+    </LinearLayout>
+</ScrollView>

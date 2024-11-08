@@ -6,15 +6,36 @@
     android:padding="16dp"
     android:background="#F9FAFB">
 
-    <TextView
-        android:id="@+id/tvTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"> <!-- Thêm padding chung cho bố cục -->
+
+        <!-- Tiêu đề "Chi tiết nhân viên" -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
         android:text="Chi tiết nhân viên"
         android:textSize="20sp"
         android:gravity="center"
-        android:padding="16dp"
+        android:padding="8dp"
         android:textStyle="bold" />
+
+        <!-- Nút "Edit" -->
+        <TextView
+            android:id="@+id/tvEditNV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:padding="8dp"
+          />
+    </LinearLayout>
+
     <!-- Profile Image -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profileImageView"

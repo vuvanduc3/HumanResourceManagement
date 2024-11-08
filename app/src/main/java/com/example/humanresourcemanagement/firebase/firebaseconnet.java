@@ -120,6 +120,7 @@ public class firebaseconnet {
                     }
                 });
     }
+
     // Phương thức để cập nhật thông tin chức vụ
     public void editChucVu(String chucvuId, String newHeSoChucVu,  final OnChucVuReceivedListener listener) {
         CollectionReference chucVuRef = db.collection("chucvu");
@@ -150,6 +151,7 @@ public class firebaseconnet {
                     }
                 });
     }
+
     // Phương thức để xóa chức vụ dựa trên chucvu_id
     public void deleteChucVu(String chucvuId, final OnChucVuDeleteListener listener) {
         CollectionReference chucVuRef = db.collection("chucvu");
@@ -176,6 +178,7 @@ public class firebaseconnet {
                     }
                 });
     }
+
     // Phương thức để thêm chức vụ mới
     public void addChucVu(String chucvuId, String tenChucVu, String heSoChucVu, final OnChucVuAddListener listener) {
         CollectionReference chucVuRef = db.collection("chucvu");
@@ -198,46 +201,51 @@ public class firebaseconnet {
                 });
     }
 
+    // Phương thức để cập nhật thông tin nhân viên
+    public void updateEmployee(String employeeId, Employee updatedEmployee, OnEmployeeUpdatedListener listener) {
+        db.collection("employees").document(employeeId).set(updatedEmployee)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onEmployeeUpdated();  // Cập nhật thành công
+                    } else {
+                        listener.onError(task.getException());  // Cập nhật thất bại
+                    }
+                });
+    }
+
+    // Interface để nhận kết quả từ Firebase
+    public interface OnEmployeeListReceivedListener {
+        void onEmployeeListReceived(List<Employee> employeeList);
+        void onEmployeeListError(Exception e);
+    }
+
+    public interface OnEmployeeReceivedListener {
+        void onEmployeeReceived(Employee employee);
+        void onEmployeeError(Exception e);
+    }
+
+    public interface OnEmployeeUpdatedListener {
+        void onEmployeeUpdated();
+        void onError(Exception e);
+    }
+
+    public interface OnChucVuListReceivedListener {
+        void onChucVuListReceived(List<ChucVu> chucVuList);
+        void onChucVuListError(Exception e);
+    }
+
+    public interface OnChucVuReceivedListener {
+        void onChucVuReceived(ChucVu chucVu);
+        void onChucVuError(Exception e);
+    }
+
     public interface OnChucVuAddListener {
         void onChucVuAdded();
         void onChucVuAddError(Exception e);
     }
 
-
-    // Interface để nhận kết quả xóa chức vụ
     public interface OnChucVuDeleteListener {
         void onChucVuDeleted();
         void onChucVuDeleteError(Exception e);
-    }
-
-    // Interface để nhận danh sách chức vụ
-    public interface OnChucVuListReceivedListener {
-        void onChucVuListReceived(List<ChucVu> chucVuList);
-
-        void onChucVuListError(Exception e);
-
-    }
-
-    // Interface để nhận chi tiết chức vụ
-    public interface OnChucVuReceivedListener {
-        void onChucVuReceived(ChucVu chucVu);
-
-        void onChucVuError(Exception e);
-    }
-
-
-    // Interface để nhận kết quả Employee
-    public interface OnEmployeeReceivedListener {
-        void onEmployeeReceived(Employee employee);
-
-        void onEmployeeError(Exception e);
-    }
-
-
-    // Interface để nhận danh sách nhân viên
-    public interface OnEmployeeListReceivedListener {
-        void onEmployeeListReceived(List<Employee> employeeList);
-
-        void onEmployeeListError(Exception e);
     }
 }

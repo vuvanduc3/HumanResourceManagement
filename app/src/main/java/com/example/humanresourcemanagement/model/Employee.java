@@ -22,7 +22,7 @@ public class Employee {
     }
 
     public Employee(String cccd, String chucvuId, String diachi, String employeeId, String gioitinh,
-                    String id, String imageUrl, String luongcoban, String matKhau, String name,
+                    String id, String luongcoban, String matKhau, String name,
                     String ngaybatdau, String ngaysinh, String phongbanId, String sdt, String trangthai) {
         this.cccd = cccd;
         this.chucvuId = chucvuId;
@@ -57,5 +57,65 @@ public class Employee {
     public String getPhongbanId() { return phongbanId; }
     public String getSdt() { return sdt; }
     public String getTrangthai() { return trangthai; }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
+
+    public void setChucvuId(String chucvuId) {
+        this.chucvuId = chucvuId;
+    }
+
+    public void setDiachi(String diachi) {
+        this.diachi = diachi;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public void setGioitinh(String gioitinh) {
+        this.gioitinh = gioitinh;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setLuongcoban(String luongcoban) {
+        this.luongcoban = luongcoban;
+    }
+
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNgaybatdau(String ngaybatdau) {
+        this.ngaybatdau = ngaybatdau;
+    }
+
+    public void setNgaysinh(String ngaysinh) {
+        this.ngaysinh = ngaysinh;
+    }
+
+    public void setPhongbanId(String phongbanId) {
+        this.phongbanId = phongbanId;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public void setTrangthai(String trangthai) {
+        this.trangthai = trangthai;
+    }
 }
 
