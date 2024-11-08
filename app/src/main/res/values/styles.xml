@@ -4,4 +4,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+        <style name="SpinnerPopupStyle" parent="Widget.AppCompat.Spinner.Underlined">
+            <item name="android:popupBackground">#FFFFFF</item>
+            <item name="android:backgroundTint">#e0e0e0</item>
+          
+        </style>
+
 </resources>
