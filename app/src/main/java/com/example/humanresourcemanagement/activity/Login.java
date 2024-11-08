@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
                 public void onLoginSuccess(Employee employee, String role) {
                     if ("GD".equals(role)) {
                         // Điều hướng tới màn hình GD
-                        startActivity(new Intent(Login.this, HomeScreen.class));
+                        startActivity(new Intent(Login.this, MainActivity.class));
                     } else if ("TP".equals(role)) {
                         // Điều hướng tới màn hình TP
                         startActivity(new Intent(Login.this, ChucVu.class));
