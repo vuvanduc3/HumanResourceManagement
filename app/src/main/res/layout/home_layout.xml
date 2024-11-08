@@ -322,6 +322,7 @@
 
             <!-- Chức vụ-->
             <LinearLayout
+                android:id="@+id/lnChucVu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -333,8 +334,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
                     android:src="@drawable/chuc_vu_icon" />
 
                 <TextView
@@ -347,6 +348,7 @@
 
             <!-- Bằng cấp -->
             <LinearLayout
+                android:id="@+id/lnBangCap"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -379,6 +381,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:layout_margin="5dp"
+                android:id="@+id/lnSkill"
                 android:padding="8dp">
 
                 <ImageView
