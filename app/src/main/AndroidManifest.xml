@@ -13,10 +13,11 @@
         android:theme="@style/Theme.HumanResourceManagement"
         tools:targetApi="31">
         <activity
+            android:name=".activity.MenuProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.Login"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
