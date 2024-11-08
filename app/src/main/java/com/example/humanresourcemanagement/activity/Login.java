@@ -8,7 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.humanresourcemanagement.R;
-import com.example.humanresourcemanagement.activity.HomeScreen;
 import com.example.humanresourcemanagement.activity.MainActivity;
 import com.example.humanresourcemanagement.databinding.ActivityLoginBinding;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
