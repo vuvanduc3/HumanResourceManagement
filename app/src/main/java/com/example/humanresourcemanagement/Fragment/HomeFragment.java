@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.humanresourcemanagement.activity.AddThongBaoActivity;
 import com.example.humanresourcemanagement.databinding.HomeLayoutBinding;
 import com.example.humanresourcemanagement.activity.EmployeeListActivity;
 import com.example.humanresourcemanagement.activity.ChucVuActivity;
@@ -69,6 +70,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PhongBanListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        binding.lnThongBao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddThongBaoActivity.class);
                 startActivity(intent);
             }
         });

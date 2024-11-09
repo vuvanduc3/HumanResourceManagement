@@ -70,12 +70,6 @@ public class ThongBao {
         this.trangThai = trangThai;
     }
 
-    // Phương thức trả về chi tiết thông báo
-    public String getThongBaoDetails() {
-        return "Mã thông báo: " + maThongBao + ", Mã nhân viên: " + maNhanVien + ", Loại thông báo: " + loaiThongBao +
-                ", Thông điệp: " + thongDiep + ", Ngày thông báo: " + ngayThongBao + ", Trạng thái: " + trangThai;
-    }
-
     // Ghi đè phương thức toString
     @Override
     public String toString() {

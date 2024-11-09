@@ -57,4 +57,6 @@ dependencies {
 
     // Firebase Storage SDK
     implementation("com.google.firebase:firebase-storage:20.1.0")
+
+    implementation("com.google.firebase:firebase-database:20.3.0")
 }
