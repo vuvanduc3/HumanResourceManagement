@@ -35,11 +35,13 @@ public class CCCDActivity extends AppCompatActivity {
 
         // Khởi tạo Firebase
         cccdFireBase = new CCCDFireBase(this);
-        String cccdId = "123456789"; // Thay thế bằng ID thực tế của CCCD
-
+        String cccdId = getIntent().getStringExtra("employeeId");
         loadDataCCCD(cccdId);
         // Lấy dữ liệu từ Firestore
 
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
 
     }
 

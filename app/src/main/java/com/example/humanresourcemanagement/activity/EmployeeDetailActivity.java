@@ -37,6 +37,7 @@ public class EmployeeDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerViewSkillnv; // RecyclerView for degrees
     private SkillNVAdapter Skillnvdapter; // Adapter for degrees
     private List<ChiTietSkill> chiTietSkillList = new ArrayList<>();
+    private String cccdID ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,13 @@ public class EmployeeDetailActivity extends AppCompatActivity {
             intent.putExtra("employeeId", employeeId);
             startActivityForResult(intent, ADD_BANGCAP_REQUEST); // Dùng startActivityForResult thay vì startActivity
         });
+
+        binding.tvCCCD.setOnClickListener(v -> {
+            Intent intent = new Intent(EmployeeDetailActivity.this, CCCDActivity.class);
+            intent.putExtra("cccdId", cccdID);
+            startActivityForResult(intent, ADD_SKILL_REQUEST); // Dùng startActivityForResult thay vì startActivity
+        });
+
 
         binding.btnAddSK.setOnClickListener(v -> {
             Intent intent = new Intent(EmployeeDetailActivity.this, AddSkillNvActivity.class);
@@ -98,6 +106,7 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         firebaseconnet.getEmployeeById(employeeId, new firebaseconnet.OnEmployeeReceivedListener() {
             @Override
             public void onEmployeeReceived(Employee employee) {
+                cccdID=employee.getCccd();
                 // Cập nhật UI với thông tin nhân viên
                 binding.nameTextView.setText(employee.getName());
                 binding.positionTextView.setText(employee.getChucvuId());
