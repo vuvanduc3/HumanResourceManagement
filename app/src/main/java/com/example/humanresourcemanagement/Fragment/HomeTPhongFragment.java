@@ -1,66 +1,70 @@
 package com.example.humanresourcemanagement.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.humanresourcemanagement.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeTPhongFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.humanresourcemanagement.activity.EmployeeListActivity;
+import com.example.humanresourcemanagement.activity.AddThongBaoActivity;
+import com.example.humanresourcemanagement.model.Employee;
+import com.example.humanresourcemanagement.databinding.FragmentHomeTPhongBinding;
+
 public class HomeTPhongFragment extends Fragment {
+    private FragmentHomeTPhongBinding binding;
+    private Employee employee;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeTPhongFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeTPhongFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeTPhongFragment newInstance(String param1, String param2) {
+    // Phương thức tạo instance với Employee
+    public static HomeTPhongFragment newInstance(Employee employee) {
         HomeTPhongFragment fragment = new HomeTPhongFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable("employee_data", employee); // Truyền Employee qua Bundle
         fragment.setArguments(args);
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentHomeTPhongBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_t_phong, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Nhận Employee từ Bundle
+        if (getArguments() != null) {
+            employee = getArguments().getParcelable("employee_data");
+        }
+
+        // Sử dụng Employee nếu cần
+        if (employee != null) {
+            // Ví dụ: làm gì đó với employee
+        }
+
+        binding.lnNhanVien.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EmployeeListActivity.class);
+            startActivity(intent);
+        });
+
+        binding.lnThongBao.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddThongBaoActivity.class);
+
+
+            Log.d("------------------eployeee", "thong tind: "+employee);
+            // Truyền Employee vào Intent
+            if (employee != null) {
+                intent.putExtra("employee_data", employee);
+            }
+            startActivity(intent);
+        });
     }
 }

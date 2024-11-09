@@ -2,6 +2,7 @@ package com.example.humanresourcemanagement.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,14 +33,18 @@ public class AddThongBaoActivity extends AppCompatActivity {
     private List<Employee> employeeList = new ArrayList<>();
     private firebaseconnet firebaseConnectionEmployee;
     private thongBaoFirebase thongBaoFirebase;
+    private  Employee employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAddThongbaoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-         thongBaoFirebase = new thongBaoFirebase(this);
 
+        // Nhận Employee từ Intent
+         employee = getIntent().getParcelableExtra("employee_data");
+
+        thongBaoFirebase = new thongBaoFirebase(this);
         phongBanfirebase = new phongBanfirebase(this);
         firebaseConnectionEmployee = new firebaseconnet(this);
 
@@ -55,11 +60,27 @@ public class AddThongBaoActivity extends AppCompatActivity {
         });
 
 
+        // Để ẩn spinner
+        if(employee.getChucvuId().equals("TP"))
+        {
+            binding.spinnerPhongBan.setVisibility(View.GONE);
+        }
     }
     private void addThongBao() {
         String loaiThongBao = binding.edtTieuDe.getText().toString().trim();
         String thongDiep = binding.edtNoiDung.getText().toString().trim();
-        String maPhongBan = ((PhongBan) binding.spinnerPhongBan.getSelectedItem()).getMaPhongBan();
+        final String maPhongBan;
+
+        if (employee.getChucvuId().equals("TP")) {
+            maPhongBan = employee.getPhongbanId();
+        } else {
+            if (binding.spinnerPhongBan.getSelectedItem() != null) {
+                maPhongBan = ((PhongBan) binding.spinnerPhongBan.getSelectedItem()).getMaPhongBan();
+            } else {
+                Toast.makeText(this, "Vui lòng chọn phòng ban", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
         if (thongDiep.isEmpty() || loaiThongBao.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
@@ -69,10 +90,13 @@ public class AddThongBaoActivity extends AppCompatActivity {
         ThongBao thongBao = new ThongBao(null, null, loaiThongBao, thongDiep, getCurrentDate(), null);
 
         if ("all".equals(maPhongBan)) {
+            // Send notification to all employees
             thongBaoFirebase.addAllThongBao(thongBao, employeeList, new thongBaoFirebase.OnThongBaoAddedListener() {
                 @Override
                 public void onThongBaoAdded() {
                     Toast.makeText(AddThongBaoActivity.this, "Thông báo đã được gửi tới tất cả nhân viên", Toast.LENGTH_SHORT).show();
+                    finish();
+
                 }
 
                 @Override
@@ -81,18 +105,27 @@ public class AddThongBaoActivity extends AppCompatActivity {
                 }
             });
         } else {
+            // Send notification to a specific department
             List<Employee> employeesInPhongBan = getEmployeesInPhongBan(maPhongBan);
+
+            // If employee has role "GD" and is sending to a specific department, add them to the notification list
+            if (employee.getChucvuId().equals("GD")) {
+                employeesInPhongBan.add(employee);  // Add the "GD" employee to the list
+            }
+
             thongBaoFirebase.addAllThongBao(thongBao, employeesInPhongBan, new thongBaoFirebase.OnThongBaoAddedListener() {
                 @Override
                 public void onThongBaoAdded() {
                     String tenPhongBan = "";
                     for (PhongBan phongBan : phongBanList) {
                         if (phongBan.getMaPhongBan().equals(maPhongBan)) {
-                            tenPhongBan = phongBan.getTenPhongBan(); // Giả sử có phương thức getTenPhongBan()
+                            tenPhongBan = phongBan.getTenPhongBan();
                             break;
                         }
                     }
-                    Toast.makeText(AddThongBaoActivity.this, "Thông báo đã được gửi tới phòng ban "+tenPhongBan, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddThongBaoActivity.this, "Thông báo đã được gửi tới phòng ban " + tenPhongBan, Toast.LENGTH_SHORT).show();
+                    finish();
+
                 }
 
                 @Override
@@ -104,6 +137,7 @@ public class AddThongBaoActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Đang gửi thông báo...", Toast.LENGTH_SHORT).show();
     }
+
 
     // Phương thức để lấy danh sách nhân viên trong phòng ban
     private List<Employee> getEmployeesInPhongBan(String maPhongBan) {
@@ -131,13 +165,7 @@ public class AddThongBaoActivity extends AppCompatActivity {
             public void onEmployeeListReceived(List<Employee> employees) {
                 employeeList.clear();
                 employeeList.addAll(employees);
-
-
-                Log.d("-------------ds-------", "onEmployeeListReceived: "+employeeList);
-
             }
-
-
             @Override
             public void onEmployeeListError(Exception e) {
                 Log.e("PhongBanDetail", "Error fetching employee list", e);
@@ -145,10 +173,6 @@ public class AddThongBaoActivity extends AppCompatActivity {
         });
 
     }
-
-
-
-
     // lấy ds phòng ban cho spinner
     private void loatPBList() {
         phongBanfirebase.getPhongBanList(new phongBanfirebase.OnPhongBanListReceivedListener() {
@@ -161,7 +185,6 @@ public class AddThongBaoActivity extends AppCompatActivity {
                 phongBanList.addAll(phongBans);
                 setUpPhongBanAdapter();
             }
-
             @Override
             public void onPhongBanListError(Exception e) {
 

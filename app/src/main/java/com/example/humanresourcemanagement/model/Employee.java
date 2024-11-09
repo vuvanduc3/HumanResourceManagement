@@ -1,6 +1,9 @@
 package com.example.humanresourcemanagement.model;
 
-public class Employee {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Employee implements Parcelable {
     private String cccd;
     private String chucvuId;
     private String diachi;
@@ -60,7 +63,61 @@ public class Employee {
 
     @Override
     public String toString() {
-        return employeeId+'-'+ name; // Trả về tên để hiển thị trong Spinner
+        return employeeId + '-' + name; // Trả về tên để hiển thị trong Spinner
+    }
+
+    // Implement Parcelable
+    protected Employee(Parcel in) {
+        cccd = in.readString();
+        chucvuId = in.readString();
+        diachi = in.readString();
+        employeeId = in.readString();
+        gioitinh = in.readString();
+        id = in.readString();
+        imageUrl = in.readString();
+        luongcoban = in.readString();
+        matKhau = in.readString();
+        name = in.readString();
+        ngaybatdau = in.readString();
+        ngaysinh = in.readString();
+        phongbanId = in.readString();
+        sdt = in.readString();
+        trangthai = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(cccd);
+        dest.writeString(chucvuId);
+        dest.writeString(diachi);
+        dest.writeString(employeeId);
+        dest.writeString(gioitinh);
+        dest.writeString(id);
+        dest.writeString(imageUrl);
+        dest.writeString(luongcoban);
+        dest.writeString(matKhau);
+        dest.writeString(name);
+        dest.writeString(ngaybatdau);
+        dest.writeString(ngaysinh);
+        dest.writeString(phongbanId);
+        dest.writeString(sdt);
+        dest.writeString(trangthai);
+    }
+
+    public static final Creator<Employee> CREATOR = new Creator<Employee>() {
+        @Override
+        public Employee createFromParcel(Parcel in) {
+            return new Employee(in);
+        }
+
+        @Override
+        public Employee[] newArray(int size) {
+            return new Employee[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }
-

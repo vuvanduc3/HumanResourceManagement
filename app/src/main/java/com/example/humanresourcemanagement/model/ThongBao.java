@@ -1,6 +1,9 @@
 package com.example.humanresourcemanagement.model;
 
-public class ThongBao {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ThongBao implements Parcelable {
     private String maThongBao;
     private String maNhanVien;
     private String loaiThongBao;
@@ -19,6 +22,43 @@ public class ThongBao {
     }
 
     public ThongBao() {
+    }
+
+    // Implement Parcelable
+    protected ThongBao(Parcel in) {
+        maThongBao = in.readString();
+        maNhanVien = in.readString();
+        loaiThongBao = in.readString();
+        thongDiep = in.readString();
+        ngayThongBao = in.readString();
+        trangThai = in.readString();
+    }
+
+    public static final Creator<ThongBao> CREATOR = new Creator<ThongBao>() {
+        @Override
+        public ThongBao createFromParcel(Parcel in) {
+            return new ThongBao(in);
+        }
+
+        @Override
+        public ThongBao[] newArray(int size) {
+            return new ThongBao[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(maThongBao);
+        dest.writeString(maNhanVien);
+        dest.writeString(loaiThongBao);
+        dest.writeString(thongDiep);
+        dest.writeString(ngayThongBao);
+        dest.writeString(trangThai);
     }
 
     // Getters và Setters cho các thuộc tính

@@ -37,16 +37,11 @@ public class Login extends AppCompatActivity {
             firebaseConnection.login(employeeId, matKhau, new firebaseconnet.OnLoginListener() {
                 @Override
                 public void onLoginSuccess(Employee employee, String role) {
-                    if ("GD".equals(role)) {
-                        // Điều hướng tới màn hình GD
-                        startActivity(new Intent(Login.this, MainActivity.class));
-                    } else if ("TP".equals(role)) {
-                        // Điều hướng tới màn hình TP
-                        startActivity(new Intent(Login.this, ChucVu.class));
-                    } else {
-                        // Điều hướng tới màn hình khác
-                        startActivity(new Intent(Login.this, MainActivity.class));
-                    }
+                    Intent intent;
+                        intent = new Intent(Login.this, MainActivity.class);
+                    // Truyền đối tượng Employee qua Intent
+                    intent.putExtra("employee_data", employee);
+                    startActivity(intent);
                     finish();
                 }
 

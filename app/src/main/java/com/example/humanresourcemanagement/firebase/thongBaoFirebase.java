@@ -5,9 +5,13 @@ import android.util.Log;
 import com.example.humanresourcemanagement.model.ThongBao;
 import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class thongBaoFirebase {
@@ -57,6 +61,56 @@ public class thongBaoFirebase {
                     });
         }
     }
+
+    // lấy ds thông báo
+
+    public void getThongBaos(OnThongBaosRetrievedListener listener) {
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<ThongBao> thongBaoList = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ThongBao thongBao = snapshot.getValue(ThongBao.class);
+                    thongBaoList.add(thongBao);
+                }
+
+                listener.onThongBaosRetrieved(thongBaoList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onThongBaoRetrieveError(databaseError.toException());
+            }
+        });
+    }
+
+    public void updateThongBao(ThongBao thongBao, OnThongBaoUpdateListener listener) {
+        // Sử dụng mã thông báo làm khóa để cập nhật
+        db.child(thongBao.getMaThongBao()).child("trangThai").setValue("Đã đọc")
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("ThongBao", "Cập nhật trạng thái thành công cho thông báo ID: " + thongBao.getMaThongBao());
+                    listener.onUpdateSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("ThongBao", "Lỗi khi cập nhật trạng thái: " + e.getMessage());
+                    listener.onUpdateError(e);
+                });
+    }
+
+    // Interface để nhận kết quả khi cập nhật thông báo
+    public interface OnThongBaoUpdateListener {
+        void onUpdateSuccess();
+        void onUpdateError(Exception e);
+    }
+    // Interface for callback when notifications are retrieved
+    public interface OnThongBaosRetrievedListener {
+        void onThongBaosRetrieved(List<ThongBao> thongBaoList);
+        void onThongBaoRetrieveError(Exception e);
+    }
+
+
+
     // Interface để nhận kết quả khi thêm thông báo
     public interface OnThongBaoAddedListener {
         void onThongBaoAdded();
