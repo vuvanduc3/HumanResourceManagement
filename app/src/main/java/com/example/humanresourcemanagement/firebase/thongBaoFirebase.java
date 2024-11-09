@@ -2,6 +2,7 @@ package com.example.humanresourcemanagement.firebase;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.example.humanresourcemanagement.model.ThongBao;
 import com.example.humanresourcemanagement.model.Employee;
 import com.google.firebase.FirebaseApp;
@@ -44,7 +45,7 @@ public class thongBaoFirebase {
             thongBaoChoNhanVien.setNgayThongBao(thongBao.getNgayThongBao());
             thongBaoChoNhanVien.setTrangThai("Chưa đọc");
 
-            Log.d("----------thong bao", "addAllThongBao: "+thongBaoChoNhanVien);
+            Log.d("----------thong bao", "addAllThongBao: " + thongBaoChoNhanVien);
 
             // Lưu thông báo vào Firebase Realtime Database
             db.child(key).setValue(thongBaoChoNhanVien)
@@ -62,10 +63,31 @@ public class thongBaoFirebase {
         }
     }
 
-    // lấy ds thông báo
-
+    // Lấy danh sách thông báo một lần
     public void getThongBaos(OnThongBaosRetrievedListener listener) {
         db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<ThongBao> thongBaoList = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ThongBao thongBao = snapshot.getValue(ThongBao.class);
+                    thongBaoList.add(thongBao);
+                }
+
+                listener.onThongBaosRetrieved(thongBaoList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onThongBaoRetrieveError(databaseError.toException());
+            }
+        });
+    }
+
+    // Lắng nghe thay đổi trong danh sách thông báo
+    public void listenForThongBaos(OnThongBaosRetrievedListener listener) {
+        db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<ThongBao> thongBaoList = new ArrayList<>();
@@ -103,13 +125,12 @@ public class thongBaoFirebase {
         void onUpdateSuccess();
         void onUpdateError(Exception e);
     }
+
     // Interface for callback when notifications are retrieved
     public interface OnThongBaosRetrievedListener {
         void onThongBaosRetrieved(List<ThongBao> thongBaoList);
         void onThongBaoRetrieveError(Exception e);
     }
-
-
 
     // Interface để nhận kết quả khi thêm thông báo
     public interface OnThongBaoAddedListener {

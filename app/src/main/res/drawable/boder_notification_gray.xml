@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#CCCCCC" /> <!-- Màu nền trắng để tránh màu thừa -->
+    <solid android:color="#C7EBEF" /> <!-- Màu nền trắng để tránh màu thừa -->
     <stroke
-        android:width="2dp"
-        android:color="#000000" /> <!-- Viền đen cho thông báo -->
+        android:width="1dp"
+        android:color="#DBCDCD" />
     <corners android:radius="15dp" /> <!-- Độ bo góc -->
     <padding
         android:bottom="5dp"

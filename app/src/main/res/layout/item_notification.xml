@@ -5,6 +5,7 @@
     android:layout_marginBottom="10dp"
     android:background="@drawable/border_notification"
     android:orientation="vertical"
+    android:elevation="5dp"
     android:id="@+id/llItemNofi"
 
     android:padding="10dp">

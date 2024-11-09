@@ -25,7 +25,7 @@ public class EmployeeDetailActivity extends AppCompatActivity {
 
         // Lấy employeeId từ Intent
         String employeeId = getIntent().getStringExtra("employeeId");
-
+        boolean isEditable = getIntent().getBooleanExtra("isEditable", false);
         // Khởi tạo Firebase
         firebaseconnet = new firebaseconnet(this);
 
@@ -42,6 +42,10 @@ public class EmployeeDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if (isEditable) {
+            binding.tvEditNV.setVisibility(View.GONE);
+        }
     }
 
     private void getEmployeeDetails(String employeeId) {

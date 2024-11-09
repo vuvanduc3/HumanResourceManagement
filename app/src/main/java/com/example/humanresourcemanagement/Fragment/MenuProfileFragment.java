@@ -1,49 +1,37 @@
 package com.example.humanresourcemanagement.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.activity.AddThongBaoActivity;
+import com.example.humanresourcemanagement.activity.DoiMatKhauActivity;
+import com.example.humanresourcemanagement.activity.EmployeeDetailActivity;
+import com.example.humanresourcemanagement.activity.EmployeeListActivity;
+import com.example.humanresourcemanagement.activity.Login;
+import com.example.humanresourcemanagement.databinding.FragmentMenuProfileBinding;
+import com.example.humanresourcemanagement.model.Employee;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MenuProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MenuProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_EMPLOYEE = "employee";
+    private Employee employee;
+    private FragmentMenuProfileBinding binding;
 
     public MenuProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MenuProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MenuProfileFragment newInstance(String param1, String param2) {
+    public static MenuProfileFragment newInstance(Employee employee) {
         MenuProfileFragment fragment = new MenuProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(ARG_EMPLOYEE, employee);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +40,66 @@ public class MenuProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            employee = getArguments().getParcelable(ARG_EMPLOYEE);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menu_profile, container, false);
+        binding = FragmentMenuProfileBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        // Hiển thị thông tin nhân viên
+        binding.profileName.setText(employee.getName());
+        binding.profilePosition.setText(employee.getPhongbanId());
+
+        binding.greetingText.setText("Hi "+employee.getName()+"!");
+
+        // Tải hình ảnh
+        if (employee.getImageUrl() != null && !employee.getImageUrl().isEmpty()) {
+            Picasso.get()
+                    .load(employee.getImageUrl())
+                    .placeholder(R.drawable.baseline_account_circle_24) // Hình ảnh placeholder
+                    .error(R.drawable.baseline_account_circle_24) // Hình ảnh lỗi
+                    .into(binding.profileImage);
+        }
+
+        binding.btnPersonalInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EmployeeDetailActivity.class);
+            intent.putExtra("employeeId", employee.getEmployeeId());
+            intent.putExtra("isEditable", true);
+            startActivity(intent);
+        });
+
+        binding.btnEditPass.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), DoiMatKhauActivity.class);
+            intent.putExtra("employeeId", employee.getEmployeeId());
+            startActivity(intent);
+        });
+
+        binding.btnLogOut.setOnClickListener(v -> {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Đăng xuất")
+                    .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+                    .setPositiveButton("Có", (dialog, which) -> {
+                        Intent intent = new Intent(getActivity(), Login.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        getActivity().finish();
+                    })
+                    .setNegativeButton("Không", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

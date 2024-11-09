@@ -29,10 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         employee = getIntent().getParcelableExtra("employee_data");
 
-        if (employee != null) {
-            Toast.makeText(this, "Welcome, " + employee.getName(), Toast.LENGTH_SHORT).show();
-        }
-
         // Mặc định chọn HomeFragment
         if (savedInstanceState == null) {
             if (employee.getChucvuId().equals("TP")) {
@@ -56,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nav_notify) {
                 selectedFragment = NotifiListFragment.newInstance(employee);
             } else if (item.getItemId() == R.id.nav_profile) {
-                selectedFragment = new MenuProfileFragment();
+                selectedFragment = MenuProfileFragment.newInstance(employee);
             }
 
             if (selectedFragment != null) {

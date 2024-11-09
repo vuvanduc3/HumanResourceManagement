@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ArrayList;
 import java.util.List;
-
+import androidx.appcompat.app.AlertDialog;
 public class AddThongBaoActivity extends AppCompatActivity {
 
     private ActivityAddThongbaoBinding binding;
@@ -95,12 +95,15 @@ public class AddThongBaoActivity extends AppCompatActivity {
                 @Override
                 public void onThongBaoAdded() {
                     Toast.makeText(AddThongBaoActivity.this, "Thông báo đã được gửi tới tất cả nhân viên", Toast.LENGTH_SHORT).show();
+//                    showAlertDialog("Thông báo", "Thông báo đã được gửi tới tất cả nhân viên");
+
                     finish();
 
                 }
 
                 @Override
                 public void onThongBaoAddError(Exception e) {
+
                     Toast.makeText(AddThongBaoActivity.this, "Lỗi khi gửi thông báo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -123,7 +126,10 @@ public class AddThongBaoActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    Toast.makeText(AddThongBaoActivity.this, "Thông báo đã được gửi tới phòng ban " + tenPhongBan, Toast.LENGTH_SHORT).show();
+//                    showAlertDialog("Thông báo", "Thông báo đã được gửi tới phòng ban " + tenPhongBan);
+                    Toast.makeText(AddThongBaoActivity.this, "Thông báo đã được gửi tới nhân viên phòng ban "+ tenPhongBan, Toast.LENGTH_SHORT).show();
+
+
                     finish();
 
                 }
@@ -135,7 +141,7 @@ public class AddThongBaoActivity extends AppCompatActivity {
             });
         }
 
-        Toast.makeText(this, "Đang gửi thông báo...", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -201,7 +207,13 @@ public class AddThongBaoActivity extends AppCompatActivity {
 
     }
 
-
+    private void showAlertDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
+    }
 
 
 

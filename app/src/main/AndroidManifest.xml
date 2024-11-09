@@ -68,6 +68,9 @@
             android:name=".activity.ChiTietThongBaoActivity"
             android:exported="true" />
         <activity
+            android:name=".activity.DoiMatKhauActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.Login"
             android:exported="true">
             <intent-filter>

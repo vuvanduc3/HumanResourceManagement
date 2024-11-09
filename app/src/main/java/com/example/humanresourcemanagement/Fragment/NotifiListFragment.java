@@ -60,8 +60,8 @@ public class NotifiListFragment extends Fragment {
         // Khởi tạo dịch vụ thongBaoFirebase
         thongBaoService = new thongBaoFirebase(getContext());
 
-        // Lấy danh sách thông báo
-        fetchNotifications();
+        // Lắng nghe danh sách thông báo
+        listenForNotifications();
 
         return view;
     }
@@ -70,11 +70,12 @@ public class NotifiListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("NotifiListFragment---", "onResume called------------------------");
-        fetchNotifications();
+        // Không cần gọi fetchNotifications ở đây nữa vì đã lắng nghe thông báo
     }
-    // Phương thức để lấy danh sách thông báo từ Firebase
-    private void fetchNotifications() {
-        thongBaoService.getThongBaos(new thongBaoFirebase.OnThongBaosRetrievedListener() {
+
+    // Phương thức để lắng nghe danh sách thông báo từ Firebase
+    private void listenForNotifications() {
+        thongBaoService.listenForThongBaos(new thongBaoFirebase.OnThongBaosRetrievedListener() {
             @Override
             public void onThongBaosRetrieved(List<ThongBao> thongBaoListReceived) {
                 thongBaoList.clear(); // Xóa danh sách cũ
