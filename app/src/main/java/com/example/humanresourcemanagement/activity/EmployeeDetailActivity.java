@@ -27,6 +27,8 @@ import java.util.List;
 
 public class EmployeeDetailActivity extends AppCompatActivity {
 
+    private static final int ADD_BANGCAP_REQUEST = 1;
+    private static final int ADD_SKILL_REQUEST = 2;
     private ActivityEmployeeDetailBinding binding;
     private firebaseconnet firebaseconnet;
     private RecyclerView recyclerViewDegrees; // RecyclerView for degrees
@@ -55,6 +57,17 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         getBangCapNV(employeeId);
         getSkillNV(employeeId);
         // Quay lại màn hình trước
+        binding.btnAddBC.setOnClickListener(v -> {
+            Intent intent = new Intent(EmployeeDetailActivity.this, AddBangCapNvActivity.class);
+            intent.putExtra("employeeId", employeeId);
+            startActivityForResult(intent, ADD_BANGCAP_REQUEST); // Dùng startActivityForResult thay vì startActivity
+        });
+
+        binding.btnAddSK.setOnClickListener(v -> {
+            Intent intent = new Intent(EmployeeDetailActivity.this, AddSkillNvActivity.class);
+            intent.putExtra("employeeId", employeeId);
+            startActivityForResult(intent, ADD_SKILL_REQUEST); // Dùng startActivityForResult thay vì startActivity
+        });
         binding.btnBack.setOnClickListener(v -> finish());
 
         // Chỉnh sửa thông tin nhân viên
@@ -191,6 +204,27 @@ public class EmployeeDetailActivity extends AppCompatActivity {
                 Log.e("EmployeeDetail", "Error retrieving skills", e);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String employeeId = getIntent().getStringExtra("employeeId");
+
+            if (requestCode == ADD_BANGCAP_REQUEST) {
+                if (data != null && data.getBooleanExtra("shouldRefresh", false)) {
+                    // Refresh degrees list
+                    getBangCapNV(employeeId);
+                }
+            }
+            else if (requestCode == ADD_SKILL_REQUEST) {
+                if (data != null && data.getBooleanExtra("shouldRefresh", false)) {
+                    // Refresh skills list
+                    getSkillNV(employeeId);
+                }
+            }
+        }
     }
 
 }

@@ -355,6 +355,67 @@ public class firebaseconnet {
                 });
     }
 
+    public interface OnBangCapAddListener {
+        void onBangCapAdded();
+        void onBangCapAddError(Exception e);
+    }
+
+    // Thêm phương thức để thêm bằng cấp nhân viên
+    public void addBangCapNhanVien(String employeeId, String bangcapId, String imageUrl,
+                                   String ngayCap, String noiCap, final OnBangCapAddListener listener) {
+        CollectionReference bangCapRef = db.collection("bangcapnhanvien");
+
+        // Tạo một đối tượng Map chứa thông tin bằng cấp
+        Map<String, Object> bangCapData = new HashMap<>();
+        bangCapData.put("employeeId", employeeId);
+        bangCapData.put("bangcap_id", bangcapId);
+        bangCapData.put("imageUrl", imageUrl);
+        bangCapData.put("ngaycap", ngayCap);
+        bangCapData.put("mota", noiCap);
+
+        // Tạo document ID kết hợp từ employeeId và bangcapId
+        String documentId = employeeId + "-" + bangcapId;
+
+        // Thêm dữ liệu vào Firestore với document ID được chỉ định
+        bangCapRef.document(documentId).set(bangCapData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Bằng cấp đã được thêm thành công");
+                    listener.onBangCapAdded();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Lỗi khi thêm bằng cấp", e);
+                    listener.onBangCapAddError(e);
+                });
+    }
+
+    public interface OnSkillAddListener {
+        void onSkillAdded();
+        void onSkillAddError(Exception e);
+    }
+
+    // Thêm phương thức để thêm bằng cấp nhân viên
+    public void addSkillNhanVien(String employeeId, String mask, final OnSkillAddListener listener) {
+        CollectionReference skillRef = db.collection("skillnhanvien");
+
+        // Tạo một đối tượng Map chứa thông tin kĩ năng
+        Map<String, Object> skillData = new HashMap<>();
+        skillData.put("employeeId", employeeId);
+        skillData.put("mask", mask);  // Mã bằng cấp (hoặc kĩ năng)
+
+        // Tạo document ID kết hợp từ employeeId và mask (bằng cấp)
+        String documentId = employeeId + "-" + mask;
+
+        // Thêm dữ liệu vào Firestore với document ID được chỉ định
+        skillRef.document(documentId).set(skillData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Kĩ năng đã được thêm thành công");
+                    listener.onSkillAdded();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Lỗi khi thêm kĩ năng", e);
+                    listener.onSkillAddError(e);
+                });
+    }
 
     public interface OnSkillNVListReceivedListener {
         void onSkillNVListReceived(List<ChiTietSkill> chiTietSkillList);
