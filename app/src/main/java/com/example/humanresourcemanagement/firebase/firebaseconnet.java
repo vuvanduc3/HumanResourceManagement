@@ -305,10 +305,9 @@ public class firebaseconnet {
     }
 
     public void addNhanVien2(Employee employee, final OnEmployeeAddedListener listener) {
-        // 1. Tải ảnh lên Firebase Storage và lấy URL của ảnh
-        if (employee.getImageUrl() != null) {
-            // Lấy đường dẫn đến Storage để lưu ảnh
-            Uri fileUri = Uri.fromFile(new File(employee.getImageUrl())); // Chuyển chuỗi thành Uri
+        // 1. Kiểm tra nếu có ảnh và lấy URI ảnh từ bất kỳ nguồn nào
+        if (employee.getImageUrl() != null) {  // Sử dụng getImageUri() thay vì getImageUrl()
+            Uri fileUri = Uri.parse(employee.getImageUrl()); // Đảm bảo employee.getImageUri() trả về Uri hợp lệ
 
             // Lấy tham chiếu tới Storage
             StorageReference storageReference = FirebaseStorage.getInstance().getReference()
@@ -399,6 +398,7 @@ public class firebaseconnet {
                     });
         }
     }
+
 
 
 

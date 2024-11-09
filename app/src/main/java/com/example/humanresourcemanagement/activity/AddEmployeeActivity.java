@@ -1,6 +1,9 @@
 package com.example.humanresourcemanagement.activity;
-
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +19,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AddEmployeeActivity extends AppCompatActivity {
@@ -28,6 +32,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private ArrayAdapter<String> positionAdapter;
     private ArrayAdapter<String> genderAdapter;
     private ArrayList<String> genderList = new ArrayList<>();
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +74,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedDepartment = departmentList.get(position);
                 Log.d("AddEmployeeActivity", "Department selected: " + selectedDepartment);
-                Toast.makeText(AddEmployeeActivity.this, "Selected: " + selectedDepartment, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -83,7 +88,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedPosition = positionList.get(position);
                 Log.d("AddEmployeeActivity", "Position selected: " + selectedPosition);
-                Toast.makeText(AddEmployeeActivity.this, "Selected: " + selectedPosition, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -98,7 +102,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedGender = genderList.get(position);
                 Log.d("AddEmployeeActivity", "Gender selected: " + selectedGender);
-                Toast.makeText(AddEmployeeActivity.this, "Selected: " + selectedGender, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -106,6 +109,34 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 // Xử lý khi không có item nào được chọn
             }
         });
+
+        // Lắng nghe sự kiện chọn hình ảnh
+        binding.btnChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 openImageChooser();
+            }
+        });
+    }
+
+    private void openImageChooser() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                binding.imgProfile.setImageBitmap(bitmap);  // Hiển thị hình ảnh lên ImageView
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void getDepartmentData() {
@@ -121,7 +152,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
                             departmentList.add(departmentName);
                         }
                         departmentAdapter.notifyDataSetChanged();  // Đảm bảo gọi notifyDataSetChanged
-                        Log.d("AddEmployeeActivity", "Department data updated");
                     }
                 })
                 .addOnFailureListener(e -> Log.e("AddEmployeeActivity", "Error getting department data", e));
@@ -140,7 +170,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
                             positionList.add(positionName);
                         }
                         positionAdapter.notifyDataSetChanged();  // Đảm bảo gọi notifyDataSetChanged
-                        Log.d("AddEmployeeActivity", "Position data updated");
                     }
                 })
                 .addOnFailureListener(e -> Log.e("AddEmployeeActivity", "Error getting position data", e));
@@ -159,13 +188,14 @@ public class AddEmployeeActivity extends AppCompatActivity {
         String department = binding.spinnerDepartment.getSelectedItem().toString();
         String position = binding.spinnerPosition.getSelectedItem().toString();
         String status = "true";
+        String imgUrl = imageUri.toString();
 
         // Tạo đối tượng Employee mới
         Employee newEmployee = new Employee(cccd, position, address, manv, gender,
-                "", salary, manv, name, birthDate, birthDate, department, phone, status);
+                "",imgUrl, salary, manv, name, birthDate, birthDate, department, phone, status);
 
         // Thêm nhân viên vào Firebase
-        firebaseconnet.addEmployee(newEmployee, new firebaseconnet.OnEmployeeAddedListener() {
+        firebaseconnet.addNhanVien2(newEmployee, new firebaseconnet.OnEmployeeAddedListener() {
             @Override
             public void onEmployeeAdded() {
                 Toast.makeText(AddEmployeeActivity.this, "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
@@ -174,14 +204,13 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
             @Override
             public void onEmployeeAddError(Exception e) {
-                Log.e("AddEmployee", "Error adding employee", e);
-                Toast.makeText(AddEmployeeActivity.this, "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddEmployeeActivity.this, "Lỗi khi thêm nhân viên", Toast.LENGTH_SHORT).show();
+                Log.e("AddEmployeeActivity", "Error adding employee", e);
             }
 
             @Override
             public void onError(Exception e) {
-                Log.e("AddEmployee", "Error: " + e.getMessage());
-                Toast.makeText(AddEmployeeActivity.this, "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
