@@ -70,6 +70,11 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         });
         binding.btnBack.setOnClickListener(v -> finish());
 
+        if (isEditable) {
+            binding.tvEditNV.setVisibility(View.GONE);
+        }
+
+
         // Chỉnh sửa thông tin nhân viên
         binding.tvEditNV.setOnClickListener(view -> {
             Intent intent = new Intent(EmployeeDetailActivity.this, EmployeeEditActivity.class);

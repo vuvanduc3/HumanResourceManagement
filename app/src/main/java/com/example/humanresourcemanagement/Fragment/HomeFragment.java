@@ -12,18 +12,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.humanresourcemanagement.activity.AddThongBaoActivity;
+import com.example.humanresourcemanagement.adapter.EmployeeAdapter;
 import com.example.humanresourcemanagement.databinding.HomeLayoutBinding;
 import com.example.humanresourcemanagement.activity.EmployeeListActivity;
 import com.example.humanresourcemanagement.activity.ChucVuActivity;
 import com.example.humanresourcemanagement.activity.BangCapListActivity;
 import com.example.humanresourcemanagement.activity.SkillListActivity;
 import com.example.humanresourcemanagement.activity.PhongBanListActivity;
+import com.example.humanresourcemanagement.firebase.firebaseconnet;
+import com.example.humanresourcemanagement.firebase.phongBanfirebase;
 import com.example.humanresourcemanagement.model.Employee;
+import com.example.humanresourcemanagement.model.PhongBan;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     private HomeLayoutBinding binding;
     private Employee employee;
-
+    private firebaseconnet firebaseConnection;
+    private phongBanfirebase phongBanfirebase;
+    private List<Employee> employeeList = new ArrayList<>(); // Khởi tạo danh sách nhân viên
+    private List<PhongBan> phongBanList = new ArrayList<>();
     // Phương thức tạo instance với Employee
     public static HomeFragment newInstance(Employee employee) {
         HomeFragment fragment = new HomeFragment();
@@ -49,9 +59,27 @@ public class HomeFragment extends Fragment {
             employee = getArguments().getParcelable("employee_data");
         }
 
-        // Thêm mã xử lý nếu cần dùng `employee` trong HomeFragment
+        // Khởi tạo firebaseConnection
+        firebaseConnection = new firebaseconnet(getContext());
+        phongBanfirebase = new phongBanfirebase(getContext());
+        // Thiết lập các OnClickListener cho các nút
+        setupClickListeners();
 
-        binding.lnNhanVien.setOnClickListener(v -> startActivity(new Intent(getActivity(), EmployeeListActivity.class)));
+        loadEmployeeData();
+        loadDSPhongBanData();
+
+
+    }
+
+    private void setupClickListeners() {
+        binding.lnNhanVien.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EmployeeListActivity.class);
+            if (employee != null) {
+                intent.putExtra("employee_data", employee);
+            }
+            startActivity(intent);
+        });
+
         binding.lnChucVu.setOnClickListener(v -> startActivity(new Intent(getActivity(), ChucVuActivity.class)));
         binding.lnBangCap.setOnClickListener(v -> startActivity(new Intent(getActivity(), BangCapListActivity.class)));
         binding.lnSkill.setOnClickListener(v -> startActivity(new Intent(getActivity(), SkillListActivity.class)));
@@ -66,4 +94,40 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
     }
+
+    private void loadEmployeeData() {
+        firebaseConnection.getEmployeeList(new firebaseconnet.OnEmployeeListReceivedListener() {
+            @Override
+            public void onEmployeeListReceived(List<Employee> employees) {
+                employeeList.clear();
+                employeeList.addAll(employees);
+                binding.tvTongNV.setText(employeeList.size()+"");
+            }
+
+            @Override
+            public void onEmployeeListError(Exception e) {
+                Log.e("HomeFragment", "Error getting employee list: ", e);
+            }
+        });
+    }
+
+
+
+
+    private void loadDSPhongBanData() {
+        phongBanfirebase.getPhongBanList(new phongBanfirebase.OnPhongBanListReceivedListener() {
+            @Override
+            public void onPhongBanListReceived(List<PhongBan> phongBans) {
+                phongBanList.clear();
+                 phongBanList.addAll(phongBans);
+                binding.tvTongPB.setText(phongBanList.size()+"");
+            }
+
+            @Override
+            public void onPhongBanListError(Exception e) {
+                // Xử lý lỗi nếu cần
+            }
+        });
+    }
+
 }

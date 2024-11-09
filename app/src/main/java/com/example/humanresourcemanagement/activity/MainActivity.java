@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (employee.getChucvuId().equals("GD")) {
                 loadFragment(HomeFragment.newInstance(employee));
             }
+            else {
+                loadFragment(HomeFragment.newInstance(employee));
+            }
         }
 
         // Xử lý chọn trên BottomNavigationView

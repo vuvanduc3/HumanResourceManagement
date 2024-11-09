@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chào User Trưởng Phòng"
+            android:text="Chào Giám Đốc"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phòng IT"
+            android:text=""
             android:textSize="16sp"
             android:layout_marginBottom="16dp" />
 
@@ -63,10 +63,11 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvTongNV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="20"
+                        android:text="0"
                         android:textColor="#FFFFFF"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -101,10 +102,11 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvTongPB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="4"
+                        android:text="0"
                         android:textColor="#FFFFFF"
                         android:textSize="24sp"
                         android:textStyle="bold" />

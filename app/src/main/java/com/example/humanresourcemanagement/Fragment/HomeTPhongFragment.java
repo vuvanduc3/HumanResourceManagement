@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button; // Đảm bảo import Button nếu cần
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +16,16 @@ import com.example.humanresourcemanagement.activity.EmployeeListActivity;
 import com.example.humanresourcemanagement.activity.AddThongBaoActivity;
 import com.example.humanresourcemanagement.model.Employee;
 import com.example.humanresourcemanagement.databinding.FragmentHomeTPhongBinding;
+import com.example.humanresourcemanagement.firebase.firebaseconnet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeTPhongFragment extends Fragment {
     private FragmentHomeTPhongBinding binding;
     private Employee employee;
+    private firebaseconnet firebaseConnection; // Đối tượng để kết nối Firebase
+    private List<Employee> employeeList = new ArrayList<>(); // Danh sách nhân viên
 
     // Phương thức tạo instance với Employee
     public static HomeTPhongFragment newInstance(Employee employee) {
@@ -45,26 +52,61 @@ public class HomeTPhongFragment extends Fragment {
             employee = getArguments().getParcelable("employee_data");
         }
 
-        // Sử dụng Employee nếu cần
-        if (employee != null) {
-            // Ví dụ: làm gì đó với employee
-        }
+        // Khởi tạo firebaseConnection
+        firebaseConnection = new firebaseconnet(getContext());
+
+        // Ẩn nút thêm nếu chức vụ là "TP"
+        binding.tvChaoTP.setText("Chào Trưởng Phòng "+employee.getPhongbanId()+"");
+        binding.tvPhongBan.setText("Phòng ban "+employee.getPhongbanId()+"");
+
+
+        // Lấy danh sách nhân viên
+        loadEmployeeData();
 
         binding.lnNhanVien.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EmployeeListActivity.class);
+            if (employee != null) {
+                intent.putExtra("employee_data", employee);
+            }
             startActivity(intent);
         });
 
         binding.lnThongBao.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddThongBaoActivity.class);
-
-
-            Log.d("------------------eployeee", "thong tind: "+employee);
+            Log.d("------------------employee", "thong tin: " + employee);
             // Truyền Employee vào Intent
             if (employee != null) {
                 intent.putExtra("employee_data", employee);
             }
             startActivity(intent);
+        });
+    }
+
+    private void loadEmployeeData() {
+        firebaseConnection.getEmployeeList(new firebaseconnet.OnEmployeeListReceivedListener() {
+            @Override
+            public void onEmployeeListReceived(List<Employee> employees) {
+                employeeList.clear(); // Xóa danh sách cũ
+
+                // Lấy phongBanId từ employee
+                String phongBanId = employee != null ? employee.getPhongbanId() : null;
+
+                // Lọc danh sách nhân viên theo phongBanId
+                for (Employee emp : employees) {
+                    if (emp.getPhongbanId() != null && emp.getPhongbanId().equals(phongBanId)) {
+                        employeeList.add(emp); // Thêm nhân viên vào danh sách nếu phongBanId khớp
+                    }
+                }
+
+                // Cập nhật số lượng nhân viên vào TextView
+                binding.tvTongNV.setText(String.valueOf(employeeList.size()));
+
+            }
+
+            @Override
+            public void onEmployeeListError(Exception e) {
+                Log.e("HomeTPhongFragment", "Lỗi khi lấy danh sách nhân viên: ", e);
+            }
         });
     }
 }
