@@ -18,7 +18,9 @@
             android:exported="true" />
         <activity
             android:name=".activity.AddEmployeeActivity"
-            android:exported="false" />
+            android:exported="true" >
+
+        </activity>
         <activity
             android:name=".activity.EmployeeEditActivity"
             android:exported="false" />

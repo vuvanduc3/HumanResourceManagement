@@ -37,6 +37,8 @@ android {
 
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage:20.1.0") // Thêm Firebase Storage vào đây
     implementation("com.squareup.picasso:picasso:2.8")
 
     implementation(libs.appcompat)

@@ -1,6 +1,7 @@
 package com.example.humanresourcemanagement.firebase;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.humanresourcemanagement.model.ChucVu;
@@ -10,7 +11,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -237,6 +241,189 @@ public class firebaseconnet {
                     }
                 });
     }
+    public void getPhongbanId(String phongBanName, final OnPhongbanIdRetrievedListener listener) {
+        CollectionReference phongbanRef = db.collection("phongban");
+        phongbanRef.whereEqualTo("maPhongBan", phongBanName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        String phongbanId = document.getId(); // Lấy ID của phòng ban
+                        listener.onPhongbanIdRetrieved(phongbanId);
+                    } else {
+                        listener.onPhongbanIdError(new Exception("No Phong Ban found"));
+                    }
+                });
+    }
+    public void getChucvuId(String chucVuName, final OnChucvuIdRetrievedListener listener) {
+        CollectionReference chucvuRef = db.collection("chucvu");
+        chucvuRef.whereEqualTo("chucvu_id", chucVuName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        String chucvuId = document.getId(); // Lấy ID của chức vụ
+                        listener.onChucvuIdRetrieved(chucvuId);
+                    } else {
+                        listener.onChucvuIdError(new Exception("No Chuc Vu found"));
+                    }
+                });
+    }
+    public void addEmployee(Employee employee, final OnEmployeeAddedListener listener) {
+        // Tạo đối tượng dữ liệu nhân viên
+        Map<String, Object> employeeData = new HashMap<>();
+        employeeData.put("cccd", employee.getCccd());
+        employeeData.put("chucvuId", employee.getChucvuId());
+        employeeData.put("diachi", employee.getDiachi());
+        employeeData.put("employeeId", employee.getEmployeeId());
+        employeeData.put("gioitinh", employee.getGioitinh());
+        employeeData.put("imageUrl", employee.getImageUrl());
+        employeeData.put("luongcoban", employee.getLuongcoban());
+        employeeData.put("matKhau", employee.getMatKhau());
+        employeeData.put("name", employee.getName());
+        employeeData.put("ngaybatdau", employee.getNgaybatdau());
+        employeeData.put("ngaysinh", employee.getNgaysinh());
+        employeeData.put("phongbanId", employee.getPhongbanId());
+        employeeData.put("sdt", employee.getSdt());
+        employeeData.put("trangthai", employee.getTrangthai());
+
+        // Thêm nhân viên vào Firebase với ID document là employeeId (NV000)
+        db.collection("employees").document(employee.getEmployeeId())  // Sử dụng employeeId làm ID document
+                .set(employeeData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Employee added with ID: " + employee.getEmployeeId());
+                    if (listener != null) {
+                        listener.onEmployeeAdded();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error adding employee", e);
+                    if (listener != null) {
+                        listener.onEmployeeAddError(e);
+                    }
+                });
+    }
+
+    public void addNhanVien2(Employee employee, final OnEmployeeAddedListener listener) {
+        // 1. Kiểm tra nếu có ảnh và lấy URI ảnh từ bất kỳ nguồn nào
+        if (employee.getImageUrl() != null) {  // Sử dụng getImageUri() thay vì getImageUrl()
+            Uri fileUri = Uri.parse(employee.getImageUrl()); // Đảm bảo employee.getImageUri() trả về Uri hợp lệ
+
+            // Lấy tham chiếu tới Storage
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference()
+                    .child("employee/" + employee.getEmployeeId() + ".jpg");
+
+            // Tải ảnh lên Firebase Storage
+            storageReference.putFile(fileUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Lấy URL của ảnh từ Firebase Storage
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            // 2. Lưu dữ liệu nhân viên vào Firestore sau khi tải ảnh thành công
+                            Map<String, Object> employeeData = new HashMap<>();
+                            employeeData.put("cccd", employee.getCccd());
+                            employeeData.put("chucvuId", employee.getChucvuId());
+                            employeeData.put("diachi", employee.getDiachi());
+                            employeeData.put("employeeId", employee.getEmployeeId());
+                            employeeData.put("gioitinh", employee.getGioitinh());
+                            employeeData.put("imageUrl", uri.toString());  // Thêm URL ảnh vào Firestore
+                            employeeData.put("luongcoban", employee.getLuongcoban());
+                            employeeData.put("matKhau", employee.getMatKhau());
+                            employeeData.put("name", employee.getName());
+                            employeeData.put("ngaybatdau", employee.getNgaybatdau());
+                            employeeData.put("ngaysinh", employee.getNgaysinh());
+                            employeeData.put("phongbanId", employee.getPhongbanId());
+                            employeeData.put("sdt", employee.getSdt());
+                            employeeData.put("trangthai", employee.getTrangthai());
+
+                            // Lưu dữ liệu vào Firestore với ID document là employeeId
+                            db.collection("employees").document(employee.getEmployeeId())
+                                    .set(employeeData)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d(TAG, "Employee added with ID: " + employee.getEmployeeId());
+                                        if (listener != null) {
+                                            listener.onEmployeeAdded();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.w(TAG, "Error adding employee", e);
+                                        if (listener != null) {
+                                            listener.onEmployeeAddError(e);
+                                        }
+                                    });
+                        }).addOnFailureListener(e -> {
+                            Log.w(TAG, "Error getting download URL", e);
+                            if (listener != null) {
+                                listener.onEmployeeAddError(e);
+                            }
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error uploading image", e);
+                        if (listener != null) {
+                            listener.onEmployeeAddError(e);
+                        }
+                    });
+        } else {
+            // Nếu không có ảnh, chỉ lưu dữ liệu nhân viên mà không có imageUrl
+            Map<String, Object> employeeData = new HashMap<>();
+            employeeData.put("cccd", employee.getCccd());
+            employeeData.put("chucvuId", employee.getChucvuId());
+            employeeData.put("diachi", employee.getDiachi());
+            employeeData.put("employeeId", employee.getEmployeeId());
+            employeeData.put("gioitinh", employee.getGioitinh());
+            employeeData.put("imageUrl", "");  // Nếu không có ảnh, để trống
+            employeeData.put("luongcoban", employee.getLuongcoban());
+            employeeData.put("matKhau", employee.getMatKhau());
+            employeeData.put("name", employee.getName());
+            employeeData.put("ngaybatdau", employee.getNgaybatdau());
+            employeeData.put("ngaysinh", employee.getNgaysinh());
+            employeeData.put("phongbanId", employee.getPhongbanId());
+            employeeData.put("sdt", employee.getSdt());
+            employeeData.put("trangthai", employee.getTrangthai());
+
+            // Lưu dữ liệu vào Firestore
+            db.collection("employees").document(employee.getEmployeeId())
+                    .set(employeeData)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Employee added with ID: " + employee.getEmployeeId());
+                        if (listener != null) {
+                            listener.onEmployeeAdded();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error adding employee", e);
+                        if (listener != null) {
+                            listener.onEmployeeAddError(e);
+                        }
+                    });
+        }
+    }
+
+
+
+
+
+    // Phương thức để thêm nhân viên vào Firebase
+    public interface OnEmployeeAddedListener {
+        void onEmployeeAdded();
+        void onEmployeeAddError(Exception e);
+
+        void onError(Exception e);
+    }
+
+
+
+    public interface OnChucvuIdRetrievedListener {
+        void onChucvuIdRetrieved(String chucvuId);
+        void onChucvuIdError(Exception e);
+    }
+
+
+    public interface OnPhongbanIdRetrievedListener {
+        void onPhongbanIdRetrieved(String phongbanId);
+        void onPhongbanIdError(Exception e);
+    }
+
 
 
 

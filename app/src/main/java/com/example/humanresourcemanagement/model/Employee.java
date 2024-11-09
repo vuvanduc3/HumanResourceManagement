@@ -25,6 +25,25 @@ public class Employee implements Parcelable {
     }
 
     public Employee(String cccd, String chucvuId, String diachi, String employeeId, String gioitinh,
+                    String id,String imageUrl, String luongcoban, String matKhau, String name,
+                    String ngaybatdau, String ngaysinh, String phongbanId, String sdt, String trangthai) {
+        this.cccd = cccd;
+        this.chucvuId = chucvuId;
+        this.diachi = diachi;
+        this.employeeId = employeeId;
+        this.gioitinh = gioitinh;
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.luongcoban = luongcoban;
+        this.matKhau = matKhau;
+        this.name = name;
+        this.ngaybatdau = ngaybatdau;
+        this.ngaysinh = ngaysinh;
+        this.phongbanId = phongbanId;
+        this.sdt = sdt;
+        this.trangthai = trangthai;
+    }
+    public Employee(String cccd, String chucvuId, String diachi, String employeeId, String gioitinh,
                     String id, String luongcoban, String matKhau, String name,
                     String ngaybatdau, String ngaysinh, String phongbanId, String sdt, String trangthai) {
         this.cccd = cccd;

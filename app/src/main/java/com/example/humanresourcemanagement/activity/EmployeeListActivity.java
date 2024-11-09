@@ -3,6 +3,8 @@ package com.example.humanresourcemanagement.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,6 +62,14 @@ public class EmployeeListActivity extends AppCompatActivity {
         });
         // Lấy danh sách nhân viên
         loadEmployeeData();
+
+        binding.btnThem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmployeeListActivity.this, AddEmployeeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadEmployeeData() {
