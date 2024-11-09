@@ -37,8 +37,10 @@ android {
 
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
-    implementation ("com.squareup.picasso:picasso:2.8")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage:20.1.0") // Thêm Firebase Storage vào đây
 
+    implementation ("com.squareup.picasso:picasso:2.8")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -49,9 +51,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation ("androidx.cardview:cardview:1.0.0")
 
-    implementation ("com.github.bumptech.glide:glide:4.12.0") // Kiểm tra phiên bản mới nhất trên trang chính thức của Glide
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0") // Thêm nếu cần thiết cho việc sử dụng annotation
-    implementation("com.google.firebase:firebase-firestore")
-
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation("com.github.chivorns:smartmaterialspinner:2.0.0")
 }
