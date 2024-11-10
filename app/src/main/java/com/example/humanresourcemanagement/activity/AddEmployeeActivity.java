@@ -199,7 +199,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.e("AddEmployeeActivity", "Error getting position data", e));
     }
-
     private void addEmployee() {
         // Lấy thông tin từ các trường nhập liệu
         String name = binding.etName.getText().toString();
@@ -213,13 +212,55 @@ public class AddEmployeeActivity extends AppCompatActivity {
         String department = binding.spinnerDepartment.getSelectedItem().toString();
         String position = binding.spinnerPosition.getSelectedItem().toString();
         String status = "true";
-        String imgUrl = imageUri.toString();
+        String imgUrl = imageUri != null ? imageUri.toString() : ""; // Ensure imgUrl is not null
 
         // Tạo đối tượng Employee mới
         Employee newEmployee = new Employee(cccd, position, address, manv, gender,
-                "",imgUrl, salary, manv, name, birthDate, birthDate, department, phone, status);
+                "", imgUrl, salary, manv, name, birthDate, birthDate, department, phone, status);
 
-        // Thêm nhân viên vào Firebase
+        // Nếu chức vụ là "trưởng phòng", cập nhật chức vụ cũ
+        if (position.equals("TP")) {
+            // Lấy maPhongBan để tìm trưởng phòng cũ
+            String maPhongBan = department; // Hoặc cách lấy maPhongBan khác nếu cần
+
+            // Cập nhật chức vụ cho trưởng phòng cũ
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("employees")
+                    .whereEqualTo("phongbanId", maPhongBan)
+                    .whereEqualTo("chucvuId", "TP") // Điều kiện lọc
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // Lấy thông tin trưởng phòng cũ
+                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                                String oldHeadId = document.getId(); // Lưu ID của trưởng phòng cũ
+
+                                // Cập nhật chức vụ
+                                db.collection("employees").document(oldHeadId)
+                                        .update("chucvuId", "NV")
+                                        .addOnSuccessListener(aVoid -> {
+                                            // Hiện tại đã cập nhật chức vụ của trưởng phòng cũ, giờ thêm nhân viên mới
+                                            addNewEmployee(newEmployee);
+                                            updateMaQuanLy(maPhongBan, manv); // Cập nhật maQuanLy cho phòng ban
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(AddEmployeeActivity.this, "Lỗi khi cập nhật chức vụ trưởng phòng cũ", Toast.LENGTH_SHORT).show();
+                                            Log.e("AddEmployeeActivity", "Error updating old head position", e);
+                                        });
+                            }
+                        } else {
+                            // Nếu không có trưởng phòng cũ, thêm nhân viên mới ngay lập tức
+                            addNewEmployee(newEmployee);
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("AddEmployeeActivity", "Error getting old head data", e));
+        } else {
+            // Nếu không phải trưởng phòng, chỉ cần thêm nhân viên mới
+            addNewEmployee(newEmployee);
+        }
+    }
+
+    private void addNewEmployee(Employee newEmployee) {
         firebaseconnet.addNhanVien2(newEmployee, new firebaseconnet.OnEmployeeAddedListener() {
             @Override
             public void onEmployeeAdded() {
@@ -235,8 +276,34 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
             @Override
             public void onError(Exception e) {
-
+                // Xử lý nếu có lỗi
             }
         });
+    }
+
+    private void updateMaQuanLy(String maPhongBan, String newHeadId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Cập nhật maQuanLy cho phòng ban
+        db.collection("phongban")
+                .whereEqualTo("maPhongBan", maPhongBan)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            // Cập nhật trường maQuanLy với ID của trưởng phòng mới
+                            db.collection("phongban").document(document.getId())
+                                    .update("maQuanLy", newHeadId)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("AddEmployeeActivity", "Updated maQuanLy for department: " + maPhongBan);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("AddEmployeeActivity", "Error updating maQuanLy", e);
+                                    });
+                        }
+                    } else {
+                        Log.w("AddEmployeeActivity", "No department found with maPhongBan: " + maPhongBan);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("AddEmployeeActivity", "Error getting department data", e));
     }
 }
