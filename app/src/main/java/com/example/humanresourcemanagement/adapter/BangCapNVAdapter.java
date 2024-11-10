@@ -44,10 +44,6 @@ public class BangCapNVAdapter extends RecyclerView.Adapter<BangCapNVAdapter.Empl
         ChiTietBangCap employee = employeeList.get(position);
         holder.nameTextView.setText(employee.getBangcap_id());
 
-
-
-
-
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.humanresourcemanagement.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.activity.CCCDActivity;
+import com.example.humanresourcemanagement.activity.EmployeeDetailActivity;
+import com.example.humanresourcemanagement.activity.EmployeeEditActivity;
 import com.example.humanresourcemanagement.model.Employee;
 import com.example.humanresourcemanagement.databinding.FragmentInfoDetailBinding;
 
@@ -24,20 +28,11 @@ public class InfoDetailFragment extends Fragment {
     }
 
     public static InfoDetailFragment newInstance(Employee employee) {
-
         InfoDetailFragment fragment = new InfoDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable("employee_data", employee);  // Truyền Employee qua Bundle
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            employee = getArguments().getParcelable("employee_data");  // Lưu Employee vào biến instance
-        }
     }
 
     @Override
@@ -50,9 +45,22 @@ public class InfoDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Đảm bảo binding đã được khởi tạo
+        if (getArguments() != null) {
+            employee = getArguments().getParcelable("employee_data");  // Lưu Employee vào biến instance
+        }
+
         if (employee != null) {
             updateUI(employee);  // Cập nhật UI sau khi View đã được tạo
         }
+
+        // Sự kiện khi nhấn vào nút chỉnh sửa nhân viên
+        binding.tvCCCD.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), CCCDActivity.class);
+            intent.putExtra("cccd", employee.getCccd());
+            startActivity(intent);
+        });
     }
 
     private void updateUI(Employee employee) {

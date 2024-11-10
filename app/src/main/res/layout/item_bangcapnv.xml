@@ -18,7 +18,10 @@ android:elevation="4dp">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textColor="#555555"
+        android:paddingHorizontal="5dp"
+        android:text="Bằng cấp"
+        android:layout_gravity="center"
+        android:textColor="#0014eb"
         android:paddingTop="4dp" />
 
 
