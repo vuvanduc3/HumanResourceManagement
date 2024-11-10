@@ -1,43 +1,35 @@
 package com.example.humanresourcemanagement.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
+import androidx.viewpager2.widget.ViewPager2;
+
 
 import com.example.humanresourcemanagement.R;
-import com.example.humanresourcemanagement.adapter.BangCapNVAdapter;
-import com.example.humanresourcemanagement.adapter.EmployeeAdapter;
-
-import com.example.humanresourcemanagement.adapter.SkillNVAdapter;
+import com.example.humanresourcemanagement.adapter.EmployeeDetailAdapter;
 import com.example.humanresourcemanagement.databinding.ActivityEmployeeDetailBinding;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
-import com.example.humanresourcemanagement.firebase.bangcapconnet;
 import com.example.humanresourcemanagement.model.Employee;
-import com.example.humanresourcemanagement.model.ChiTietBangCap;
-import com.example.humanresourcemanagement.model.ChiTietSkill;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EmployeeDetailActivity extends AppCompatActivity {
-
+    private int RQ_CODE = 9999;
     private static final int ADD_BANGCAP_REQUEST = 1;
     private static final int ADD_SKILL_REQUEST = 2;
     private ActivityEmployeeDetailBinding binding;
     private firebaseconnet firebaseconnet;
-    private RecyclerView recyclerViewDegrees; // RecyclerView for degrees
-    private BangCapNVAdapter degreeAdapter; // Adapter for degrees
-    private List<ChiTietBangCap> chiTietBangCaps = new ArrayList<>();
-    private RecyclerView recyclerViewSkillnv; // RecyclerView for degrees
-    private SkillNVAdapter Skillnvdapter; // Adapter for degrees
-    private List<ChiTietSkill> chiTietSkillList = new ArrayList<>();
-    private String cccdID ;
+    private String cccdID;
+    private Employee employeeInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,86 +40,72 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         // Lấy employeeId từ Intent
         String employeeId = getIntent().getStringExtra("employeeId");
         boolean isEditable = getIntent().getBooleanExtra("isEditable", false);
+
         // Khởi tạo Firebase
         firebaseconnet = new firebaseconnet(this);
 
         // Gọi hàm lấy thông tin nhân viên
         getEmployeeDetails(employeeId);
 
-        // Lấy thông tin bằng cấp
-        getBangCapNV(employeeId);
-        getSkillNV(employeeId);
         // Quay lại màn hình trước
-        binding.btnAddBC.setOnClickListener(v -> {
-            Intent intent = new Intent(EmployeeDetailActivity.this, AddBangCapNvActivity.class);
-            intent.putExtra("employeeId", employeeId);
-            startActivityForResult(intent, ADD_BANGCAP_REQUEST); // Dùng startActivityForResult thay vì startActivity
-        });
-
-        binding.tvCCCD.setOnClickListener(v -> {
-            Intent intent = new Intent(EmployeeDetailActivity.this, CCCDActivity.class);
-            intent.putExtra("cccdId", cccdID);
-            startActivityForResult(intent, ADD_SKILL_REQUEST); // Dùng startActivityForResult thay vì startActivity
-        });
-
-
-        binding.btnAddSK.setOnClickListener(v -> {
-            Intent intent = new Intent(EmployeeDetailActivity.this, AddSkillNvActivity.class);
-            intent.putExtra("employeeId", employeeId);
-            startActivityForResult(intent, ADD_SKILL_REQUEST); // Dùng startActivityForResult thay vì startActivity
-        });
         binding.btnBack.setOnClickListener(v -> finish());
 
-        if (isEditable) {
-            binding.tvEditNV.setVisibility(View.GONE);
-        }
-
-        binding.tvCCCD.setOnClickListener(view ->{
-            Intent intent = new Intent(EmployeeDetailActivity.this, CCCDActivity.class);
-            intent.putExtra("cccd", cccdID);
-            startActivity(intent);
-        });
-
-        // Chỉnh sửa thông tin nhân viên
+        // Sự kiện khi nhấn vào nút chỉnh sửa nhân viên
         binding.tvEditNV.setOnClickListener(view -> {
             Intent intent = new Intent(EmployeeDetailActivity.this, EmployeeEditActivity.class);
             intent.putExtra("employeeId", employeeId);
             startActivity(intent);
         });
+        // Sự kiện khi nhấn vào nút gọi điện
+        binding.btnCall.setOnClickListener(v -> {
+            if (employeeInfo != null && employeeInfo.getSdt() != null) {
+                String phoneNumber = employeeInfo.getSdt();
+                makeCall(phoneNumber);
+//                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+//                callIntent.setData(Uri.parse("tel:" + phoneNumber));
+//                startActivity(callIntent);
+            }
+        });
+    }
 
-        // Initialize RecyclerView for degrees
-        recyclerViewDegrees = findViewById(R.id.recyclerViewDegrees);
-        recyclerViewDegrees.setLayoutManager(new LinearLayoutManager(this));
-        degreeAdapter = new BangCapNVAdapter(chiTietBangCaps);
-        recyclerViewDegrees.setAdapter(degreeAdapter);
+    // Thiết lập TabLayout và ViewPager2
+    private void setupTabsAndViewPager() {
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
 
-        recyclerViewSkillnv = findViewById(R.id.recyclerViewSkillNV);
-        recyclerViewSkillnv.setLayoutManager(new LinearLayoutManager(this));
-        Skillnvdapter = new SkillNVAdapter(chiTietSkillList);
-        recyclerViewSkillnv.setAdapter(Skillnvdapter);
+        // Tạo Adapter cho ViewPager2
+        EmployeeDetailAdapter adapter = new EmployeeDetailAdapter(this, employeeInfo);
+        viewPager.setAdapter(adapter);
+
+        // Liên kết TabLayout với ViewPager2
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("Thông tin");
+                    break;
+                case 1:
+                    tab.setText("Bằng cấp");
+                    break;
+                case 2:
+                    tab.setText("Kỹ năng");
+                    break;
+            }
+        }).attach();
     }
 
     private void getEmployeeDetails(String employeeId) {
         firebaseconnet.getEmployeeById(employeeId, new firebaseconnet.OnEmployeeReceivedListener() {
             @Override
             public void onEmployeeReceived(Employee employee) {
-                cccdID=employee.getCccd();
-                // Cập nhật UI với thông tin nhân viên
-                binding.nameTextView.setText(employee.getName());
-                binding.positionTextView.setText(employee.getChucvuId());
-                binding.addressTextView.setText(employee.getDiachi());
-                binding.phoneTextView.setText(employee.getSdt());
-                binding.birthDateTextView.setText(employee.getNgaysinh());
-                binding.statusTextView.setText(employee.getTrangthai());
-                binding.tvCCCD.setText(employee.getCccd());
-                binding.tvLuong.setText(employee.getLuongcoban());
-                binding.tvGioiTinh.setText(employee.getGioitinh());
-                binding.tvMaNV.setText(employee.getEmployeeId());
-
-                // Hiển thị hình ảnh sử dụng thư viện Picasso
+                employeeInfo = employee;
+                cccdID = employee.getCccd();
+                binding.nameTextViewInfo.setText(employee.getName());
                 if (employee.getImageUrl() != null && !employee.getImageUrl().isEmpty()) {
                     Picasso.get().load(employee.getImageUrl()).into(binding.profileImageView);
                 }
+
+                // Set up TabLayout và ViewPager2 sau khi nhận được employeeInfo
+                setupTabsAndViewPager();
             }
 
             @Override
@@ -136,113 +114,40 @@ public class EmployeeDetailActivity extends AppCompatActivity {
             }
         });
     }
+    private void makeCall(String phoneNumber) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            // Thực hiện cuộc gọi
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+            startActivity(intent);
+        } else {
+            // Xin quyền nếu chưa có
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, 1);
+        }
+    }
 
-    // Lấy thông tin bằng cấp nhân viên từ Firebase
-    private void getBangCapNV(String employeeId) {
-        firebaseconnet.getBangCapNhanVienById(employeeId, new firebaseconnet.OnBangCapNVListReceivedListener() {
-            @Override
-            public void onBangCapNVListReceived(List<ChiTietBangCap> receivedBangCapList) {
-                // Kiểm tra nếu có thông tin bằng cấp
-                if (receivedBangCapList != null && !receivedBangCapList.isEmpty()) {
-                    // Clear existing data in the list
-                    chiTietBangCaps.clear();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-                    // Loop through the received list of degrees and fetch their names
-                    for (ChiTietBangCap bangCap : receivedBangCapList) {
-                        String bangcapId = bangCap.getBangcap_id(); // Get the degree ID
+        if(requestCode == RQ_CODE && permissions.length == grantResults.length){
+            // kiểm tra toàn bộ kết qủa grantResult
 
-                        // Fetch the degree name from Firebase using the degree ID
-                        firebaseconnet.getDegreeName(bangcapId, new firebaseconnet.OnDegreeNameReceivedListener() {
-                            @Override
-                            public void onDegreeNameReceived(String degreeName) {
-                                // Set the degree name in the ChiTietBangCap object
-                                bangCap.setBangcap_id(degreeName);  // Update the degree name
-
-                                // Add the updated degree to the list
-                                chiTietBangCaps.add(bangCap);
-
-                                // Notify the adapter to refresh the data
-                                degreeAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onDegreeNameError(Exception e) {
-                                Log.e("EmployeeDetail", "Error retrieving degree name", e);
-                                bangCap.setBangcap_id("Không có tên bằng cấp"); // If there's an error, set default text
-                                chiTietBangCaps.add(bangCap); // Add to the list even if there is an error
-                                degreeAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                } else {
-                    Log.d("EmployeeDetail", "Không có bằng cấp cho nhân viên");
+            for(int i = 0; i < grantResults.length; ++i){
+                if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                    return;
                 }
             }
 
-            @Override
-            public void onBangCapNVListError(Exception e) {
-                Log.e("EmployeeDetail", "Error retrieving degrees", e);
-            }
-        });
+
+        }
     }
-
-    // Lấy thông tin bằng cấp nhân viên từ Firebase
-    private void getSkillNV(String employeeId) {
-        firebaseconnet.getSkillNhanVienById(employeeId, new firebaseconnet.OnSkillNVListReceivedListener() {
-            @Override
-            public void onSkillNVListReceived(List<ChiTietSkill> receivedSkillList) {
-                if (receivedSkillList != null && !receivedSkillList.isEmpty()) {
-                    chiTietSkillList.clear(); // Clear existing data
-                    for (ChiTietSkill skill : receivedSkillList) {
-                        String mask = skill.getMask();
-                        firebaseconnet.getSkillName(mask, new firebaseconnet.OnSkillNameReceivedListener() {
-                            @Override
-                            public void onSkillNameReceived(String skillName) {
-                                skill.setMask(skillName);
-                                chiTietSkillList.add(skill); // Add updated skill to list
-                                Skillnvdapter.notifyDataSetChanged(); // Notify adapter of changes
-                            }
-
-                            @Override
-                            public void onSkillNameError(Exception e) {
-                                Log.e("EmployeeDetail", "Error retrieving skill name", e);
-                                skill.setMask("No skill name"); // Default text on error
-                                chiTietSkillList.add(skill);
-                                Skillnvdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                } else {
-                    Log.d("EmployeeDetail", "No skills found for employee");
-                }
-            }
-
-            @Override
-            public void onSkillNVListError(Exception e) {
-                Log.e("EmployeeDetail", "Error retrieving skills", e);
-            }
-        });
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             String employeeId = getIntent().getStringExtra("employeeId");
 
-            if (requestCode == ADD_BANGCAP_REQUEST) {
-                if (data != null && data.getBooleanExtra("shouldRefresh", false)) {
-                    // Refresh degrees list
-                    getBangCapNV(employeeId);
-                }
-            }
-            else if (requestCode == ADD_SKILL_REQUEST) {
-                if (data != null && data.getBooleanExtra("shouldRefresh", false)) {
-                    // Refresh skills list
-                    getSkillNV(employeeId);
-                }
-            }
+            // Code để xử lý kết quả trả về từ hoạt động thêm bằng cấp hoặc kỹ năng (nếu cần)
         }
     }
-
 }

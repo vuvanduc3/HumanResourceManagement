@@ -1,12 +1,10 @@
 package com.example.humanresourcemanagement.activity;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.widget.Toast;
 
 import com.example.humanresourcemanagement.Fragment.HomeTPhongFragment;
 import com.example.humanresourcemanagement.Fragment.MenuProfileFragment;
@@ -21,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private Employee employee;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,26 +28,33 @@ public class MainActivity extends AppCompatActivity {
 
         employee = getIntent().getParcelableExtra("employee_data");
 
+        // Kiểm tra chức vụ và ẩn menu Home nếu chức vụ là "NV"
+        BottomNavigationView bottomNavigationView = binding.bottomNavigation;
+        if (employee.getChucvuId().equals("NV")) {
+            // Ẩn mục "Home" nếu chức vụ là "NV"
+            bottomNavigationView.getMenu().findItem(R.id.nav_home).setVisible(false);
+        }
+
         // Mặc định chọn HomeFragment
         if (savedInstanceState == null) {
             if (employee.getChucvuId().equals("TP")) {
                 loadFragment(HomeTPhongFragment.newInstance(employee));
             } else if (employee.getChucvuId().equals("GD")) {
                 loadFragment(HomeFragment.newInstance(employee));
-            }
-            else {
-                loadFragment(HomeFragment.newInstance(employee));
+            } else {
+                loadFragment(NotifiListFragment.newInstance(employee));
             }
         }
 
         // Xử lý chọn trên BottomNavigationView
-        BottomNavigationView bottomNavigationView = binding.bottomNavigation;
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             Fragment selectedFragment = null;
 
             if (item.getItemId() == R.id.nav_home) {
                 if (employee.getChucvuId().equals("TP")) {
                     selectedFragment = HomeTPhongFragment.newInstance(employee);
+                } else if (employee.getChucvuId().equals("NV")) {
+                    selectedFragment = MenuProfileFragment.newInstance(employee);
                 } else {
                     selectedFragment = HomeFragment.newInstance(employee);
                 }

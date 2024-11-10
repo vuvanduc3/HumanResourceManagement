@@ -3,12 +3,24 @@ package com.example.humanresourcemanagement.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.adapter.BangCapNVAdapter;
+import com.example.humanresourcemanagement.adapter.SkillNVAdapter;
+import com.example.humanresourcemanagement.firebase.firebaseconnet;
+import com.example.humanresourcemanagement.model.ChiTietBangCap;
+import com.example.humanresourcemanagement.model.ChiTietSkill;
+import com.example.humanresourcemanagement.model.Employee;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,33 +29,19 @@ import com.example.humanresourcemanagement.R;
  */
 public class DegreeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private firebaseconnet firebaseconnet; // Initialize the firebaseconnet instance
+    private RecyclerView recyclerViewDegrees;
+    private BangCapNVAdapter degreeAdapter;
+    private List<ChiTietBangCap> chiTietBangCaps = new ArrayList<>();
 
     public DegreeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DegreeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DegreeFragment newInstance(String param1, String param2) {
+    public static DegreeFragment newInstance(Employee employee) {
         DegreeFragment fragment = new DegreeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable("employee_data", employee);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +49,50 @@ public class DegreeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        // Initialize firebaseconnet here
+        firebaseconnet = new firebaseconnet(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_degree, container, false);
+        View view = inflater.inflate(R.layout.fragment_degree, container, false);
+
+        // Initialize RecyclerView and Adapter
+        recyclerViewDegrees = view.findViewById(R.id.recyclerViewDegrees);
+        recyclerViewDegrees.setLayoutManager(new LinearLayoutManager(getContext()));
+        degreeAdapter = new BangCapNVAdapter(chiTietBangCaps);
+        recyclerViewDegrees.setAdapter(degreeAdapter);
+
+        // Retrieve employee data from arguments
+        Employee employee = getArguments().getParcelable("employee_data");
+        if (employee != null) {
+            getBangCapNV(employee.getId()); // Load degrees
+        }
+
+        return view;
+    }
+
+    private void getBangCapNV(String employeeId) {
+        if (firebaseconnet != null) {
+            firebaseconnet.getBangCapNhanVienById(employeeId, new firebaseconnet.OnBangCapNVListReceivedListener() {
+                @Override
+                public void onBangCapNVListReceived(List<ChiTietBangCap> receivedBangCapList) {
+                    if (receivedBangCapList != null && !receivedBangCapList.isEmpty()) {
+                        chiTietBangCaps.clear();
+                        chiTietBangCaps.addAll(receivedBangCapList);
+                        degreeAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onBangCapNVListError(Exception e) {
+                    Log.e("DegreeFragment", "Error retrieving degrees", e);
+                }
+            });
+        } else {
+            Log.e("DegreeFragment", "firebaseconnet is null");
+        }
     }
 }

@@ -5,10 +5,85 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.InfoDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <TextView
+            android:id="@+id/tvMaNV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mã nhân viên"
+            android:textSize="16sp"
+            android:textColor="#555555" />
+
+        <TextView
+            android:id="@+id/tvCCCD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CCCD"
+            android:textSize="16sp"
+            android:textColor="#555555" />
+
+        <TextView
+            android:id="@+id/tvGioiTinh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giới tính"
+            android:textSize="16sp"
+            android:textColor="#555555" />
+
+        <TextView
+            android:id="@+id/positionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chức vụ"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/addressTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ"
+            android:textSize="14sp"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/phoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại"
+            android:textSize="14sp"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tvLuong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lương"
+            android:textSize="14sp"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/birthDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày sinh"
+            android:textSize="14sp"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trạng thái"
+            android:textSize="14sp"
+            android:textColor="#555555"
+            android:textStyle="italic" />
+
+    </LinearLayout>
 </FrameLayout>
