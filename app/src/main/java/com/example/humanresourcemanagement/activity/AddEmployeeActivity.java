@@ -1,4 +1,5 @@
 package com.example.humanresourcemanagement.activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddEmployeeActivity extends AppCompatActivity {
 
@@ -117,8 +120,30 @@ public class AddEmployeeActivity extends AppCompatActivity {
                  openImageChooser();
             }
         });
-    }
+        // Sự kiện nhấn vào EditText etBirthDate để chọn ngày sinh
+        binding.etBirthDate.setOnClickListener(view -> showDatePickerDialog(binding.etBirthDate));
 
+        // Sự kiện nhấn vào EditText etStartDate để chọn ngày bắt đầu
+        binding.etStartDate.setOnClickListener(view -> showDatePickerDialog(binding.etStartDate));
+
+    }
+    // Hàm mở DatePickerDialog cho các trường ngày tháng
+    private void showDatePickerDialog(EditText editText) {
+        // Lấy ngày hiện tại làm mặc định cho DatePicker
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Tạo và hiển thị DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
+            // Định dạng ngày thành "dd/MM/yyyy" và đặt vào EditText
+            String selectedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+            editText.setText(selectedDate);
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
     private void openImageChooser() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");

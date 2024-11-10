@@ -43,64 +43,69 @@
             android:padding="8dp">
 
             <!-- CCCD Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mã số CCCD" />
-            <EditText
-                android:id="@+id/etCccd"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Mã số CCCD">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCccd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Employee ID Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mã Nhân Viên" />
-            <EditText
-                android:id="@+id/etEmployeeId"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Mã Nhân Viên">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmployeeId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Name Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Họ Tên" />
-            <EditText
-                android:id="@+id/etName"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Họ Tên">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Address Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Địa chỉ" />
-            <EditText
-                android:id="@+id/etAddress"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Địa chỉ">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Phone Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Số điện thoại" />
-            <EditText
-                android:id="@+id/etPhone"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Số điện thoại">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Gender Spinner -->
             <TextView
@@ -136,40 +141,43 @@
                 android:layout_marginBottom="12dp"/>
 
             <!-- Birth Date Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ngày sinh" />
-            <EditText
-                android:id="@+id/etBirthDate"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Ngày sinh">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etBirthDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Start Date Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ngày bắt đầu" />
-            <EditText
-                android:id="@+id/etStartDate"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:hint="Ngày bắt đầu">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etStartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Basic Salary Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mức lương cơ bản" />
-            <EditText
-                android:id="@+id/etBasicSalary"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginBottom="24dp"
+                android:hint="Mức lương cơ bản">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etBasicSalary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Submit Button -->
             <androidx.appcompat.widget.AppCompatButton
@@ -180,6 +188,5 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:textColor="@android:color/white"/>
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>
