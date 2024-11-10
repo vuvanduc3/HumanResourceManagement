@@ -51,14 +51,43 @@ public class CCCDFireBase {
     }
 
 
-    // Interface callback để lấy dữ liệu từ Firestore
-    public interface OnCCCDDataFetchedListener {
-        void onSuccess(CCCD cccd);
-        void onFailure(Exception e);
+
+    public void addCCCD(String cccdNumber, String frontImage, String backImage, final OnCCCDAddListener listener) {
+        CollectionReference cccdRef = db.collection("cccd");
+
+        // Tạo một đối tượng Map chứa thông tin CCCD
+        Map<String, Object> cccdData = new HashMap<>();
+        cccdData.put("cccdNumber", cccdNumber);
+        cccdData.put("frontImage", frontImage);
+        cccdData.put("backImage", backImage);
+
+        // Sử dụng cccdNumber làm document ID để tránh trùng lặp
+        cccdRef.document(cccdNumber).set(cccdData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "CCCD đã được thêm thành công");
+                    listener.onCCCDAdded();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Lỗi khi thêm CCCD", e);
+                    listener.onCCCDAddError(e);
+                });
     }
+
+    public interface OnCCCDAddListener {
+        void onCCCDAdded();
+        void onCCCDAddError(Exception e);
+    }
+
     // Interface callback để thông báo khi thao tác thành công hay thất bại
     public interface OnCCCDOperationCompleteListener {
         void onSuccess();
         void onFailure(Exception e);
     }
+
+    // Interface callback để lấy dữ liệu từ Firestore
+    public interface OnCCCDDataFetchedListener {
+        void onSuccess(CCCD cccd);
+        void onFailure(Exception e);
+    }
+
 }

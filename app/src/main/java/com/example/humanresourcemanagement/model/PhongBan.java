@@ -40,10 +40,6 @@ public class PhongBan {
 
     @Override
     public String toString() {
-        return "PhongBan{" +
-                "maPhongBan='" + maPhongBan + '\'' +
-                ", maQuanLy='" + maQuanLy + '\'' +
-                ", tenPhongBan='" + tenPhongBan + '\'' +
-                '}';
+        return tenPhongBan ;
     }
 }

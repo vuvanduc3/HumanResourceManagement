@@ -3,6 +3,8 @@ package com.example.humanresourcemanagement.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +32,7 @@ public class EmployeeListActivity extends AppCompatActivity {
     private ActivityEmployeeListBinding binding;
     private List<Employee> employeeList = new ArrayList<>(); // Sử dụng kiểu Employee thay vì Map
     private firebaseconnet firebaseConnection; // Sửa tên lớp
-
+    private Employee employee;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class EmployeeListActivity extends AppCompatActivity {
         recyclerViewEmployees = findViewById(R.id.recyclerViewEmployees);
         recyclerViewEmployees.setLayoutManager(new LinearLayoutManager(this));
 
+
+
         employeeAdapter = new EmployeeAdapter(employeeList);
         recyclerViewEmployees.setAdapter(employeeAdapter);
         // Thiết lập sự kiện nhấp vào cho từng item
@@ -51,7 +55,7 @@ public class EmployeeListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        
+        employee = getIntent().getParcelableExtra("employee_data");
 
         // Khởi tạo FirebaseConnect
         firebaseConnection = new firebaseconnet(this);
@@ -60,15 +64,40 @@ public class EmployeeListActivity extends AppCompatActivity {
         });
         // Lấy danh sách nhân viên
         loadEmployeeData();
+
+        if (employee != null && "TP".equals(employee.getChucvuId())) {
+            binding.btnThem.setVisibility(View.GONE);
+        }
+
+        binding.btnThem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmployeeListActivity.this, AddEmployeeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadEmployeeData() {
         firebaseConnection.getEmployeeList(new firebaseconnet.OnEmployeeListReceivedListener() {
             @Override
             public void onEmployeeListReceived(List<Employee> employees) {
-                employeeList.clear();
-                employeeList.addAll(employees);
-                employeeAdapter.notifyDataSetChanged();
+
+                if(employee.getChucvuId().equals("GD"))
+                {
+                    employeeList.clear();
+                    employeeList.addAll(employees);
+                    employeeAdapter.notifyDataSetChanged();
+                }
+                else {
+                    String phongBanId = employee.getPhongbanId();
+                    for (Employee emp : employees) {
+                        if (emp.getPhongbanId() != null && emp.getPhongbanId().equals(phongBanId)) {
+                            employeeList.add(emp); // Thêm nhân viên vào danh sách nếu phongBanId khớp
+                        }
+                    }
+                    employeeAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
