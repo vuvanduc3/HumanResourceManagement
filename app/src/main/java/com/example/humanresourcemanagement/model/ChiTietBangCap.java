@@ -1,8 +1,9 @@
 package com.example.humanresourcemanagement.model;
 
-import java.util.Date;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class ChiTietBangCap {
+public class ChiTietBangCap implements Parcelable {
     private String bangcap_id; // Thay đổi từ int sang String để tương thích với Firebase
     private String employeeId; // employeeId trong Firebase
     private String imageUrl; // imageUrl trong Firebase
@@ -56,7 +57,7 @@ public class ChiTietBangCap {
         this.mota = mota;
     }
 
-    public String  getNgaycap() {
+    public String getNgaycap() {
         return ngaycap;
     }
 
@@ -64,7 +65,7 @@ public class ChiTietBangCap {
         this.ngaycap = ngaycap;
     }
 
-    public String isXacthuc() {
+    public String getXacthuc() {
         return xacthuc;
     }
 
@@ -82,5 +83,42 @@ public class ChiTietBangCap {
     @Override
     public String toString() {
         return "Bằng cấp ID: " + bangcap_id + " - Nhân viên: " + employeeId;
+    }
+
+    // Implement Parcelable
+    protected ChiTietBangCap(Parcel in) {
+        bangcap_id = in.readString();
+        employeeId = in.readString();
+        imageUrl = in.readString();
+        mota = in.readString();
+        ngaycap = in.readString();
+        xacthuc = in.readString();
+    }
+
+    public static final Creator<ChiTietBangCap> CREATOR = new Creator<ChiTietBangCap>() {
+        @Override
+        public ChiTietBangCap createFromParcel(Parcel in) {
+            return new ChiTietBangCap(in);
+        }
+
+        @Override
+        public ChiTietBangCap[] newArray(int size) {
+            return new ChiTietBangCap[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(bangcap_id);
+        dest.writeString(employeeId);
+        dest.writeString(imageUrl);
+        dest.writeString(mota);
+        dest.writeString(ngaycap);
+        dest.writeString(xacthuc);
     }
 }
