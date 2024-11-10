@@ -294,41 +294,135 @@ public class EmployeeEditActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.e("AddEmployeeActivity", "Error getting position data", e));
     }
+
     private void updateEmployeeDetails(String employeeId) {
         // Thu thập dữ liệu từ các trường nhập liệu
-        String name = binding.editTextName.getText().toString();
+        String name = binding.editTextName.getText().toString().trim();
         String position = binding.editTextChucVuId.getSelectedItem().toString();
-        String address = binding.editTextDiaChi.getText().toString();
-        String phone = binding.editTextSDT.getText().toString();
-        String birthDate = binding.editTextNgaySinh.getText().toString();
+        String address = binding.editTextDiaChi.getText().toString().trim();
+        String phone = binding.editTextSDT.getText().toString().trim();
+        String birthDate = binding.editTextNgaySinh.getText().toString().trim();
         String status = binding.editTextTrangThai.getSelectedItem().toString();
-        String cccd = binding.editTextCCCD.getText().toString();
-        String salary = binding.editTextLuongCoBan.getText().toString();
+        String cccd = binding.editTextCCCD.getText().toString().trim();
+        String salary = binding.editTextLuongCoBan.getText().toString().trim();
         String gender = binding.editTextGioiTinh.getSelectedItem().toString();
-        String pb = binding.editTextPhongBanId.getSelectedItem().toString();
+        String department = binding.editTextPhongBanId.getSelectedItem().toString();
 
-        Employee updatedEmployee = new Employee(cccd, position, address, employeeId, gender,
-                employeeId, salary, "", name, birthDate, birthDate, pb, phone, status);
-
-        if (selectedImageUri != null) {
-            // Tải ảnh lên Firebase Storage nếu người dùng chọn ảnh mới
-            StorageReference imageRef = storageRef.child("images/" + employeeId + ".jpg");
-            imageRef.putFile(selectedImageUri)
-                    .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        updatedEmployee.setImageUrl(uri.toString()); // Cập nhật link hình ảnh
-                        // Sau khi có link, cập nhật thông tin nhân viên
-                        updateEmployeeInFirestore(employeeId, updatedEmployee);
-                    }))
-                    .addOnFailureListener(e -> {
-                        Log.e("EmployeeEdit", "Error uploading image", e);
-                        Toast.makeText(this, "Lỗi tải ảnh", Toast.LENGTH_SHORT).show();
-                    });
-        } else {
-            // Nếu không có ảnh mới, chỉ cập nhật các trường khác
-            updateEmployeeInFirestore(employeeId, updatedEmployee);
+        if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || birthDate.isEmpty() || cccd.isEmpty() || salary.isEmpty()) {
+            Toast.makeText(this, "Vui lòng điền tất cả thông tin bắt buộc", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        // Tạo đối tượng Employee mới
+        Employee updatedEmployee = new Employee(cccd, position, address, employeeId, gender, employeeId, salary, "", name, birthDate, birthDate, department, phone, status);
+
+        // Lấy thông tin nhân viên hiện tại từ Firestore
+        firebaseconnet.getEmployeeById(employeeId, new firebaseconnet.OnEmployeeReceivedListener() {
+            @Override
+            public void onEmployeeReceived(Employee employee) {
+                String oldPosition = employee.getChucvuId(); // Lưu vị trí cũ
+                String oldDepartment = employee.getPhongbanId(); // Mã phòng ban cũ
+
+
+
+                if ( position.equals("TP")) {
+                    if(oldPosition.equals("TP"))
+                    {
+                        updateDepartmentHead(oldDepartment, "");
+
+                    }
+                    updateDepartmentHead(department, employeeId);
+                }
+
+                // Kiểm tra và cập nhật nếu từ TP xuống NV
+                else if (oldPosition.equals("TP") && position.equals("NV")) {
+                    // Cập nhật mã phòng ban thành rỗng
+                    updateDepartmentHead(oldDepartment, "");
+                }
+
+                // Kiểm tra nếu có ảnh mới được chọn
+                if (selectedImageUri != null) {
+                    // Tải ảnh lên Firebase Storage
+                    StorageReference imageRef = storageRef.child("images/" + employeeId + ".jpg");
+                    imageRef.putFile(selectedImageUri)
+                            .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        updatedEmployee.setImageUrl(uri.toString()); // Cập nhật link hình ảnh
+                                        updateEmployeeInFirestore(employeeId, updatedEmployee);
+                                    }))
+                            .addOnFailureListener(e -> {
+                                Log.e("EmployeeEdit", "Error uploading image", e);
+                                Toast.makeText(EmployeeEditActivity.this, "Lỗi tải ảnh", Toast.LENGTH_SHORT).show();
+                            });
+                } else {
+                    updateEmployeeInFirestore(employeeId, updatedEmployee);
+                }
+            }
+
+            @Override
+            public void onEmployeeError(Exception e) {
+                Log.e("EmployeeEdit", "Error retrieving employee details", e);
+                Toast.makeText(EmployeeEditActivity.this, "Lỗi khi lấy thông tin nhân viên", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+
+    private void updateDepartmentHead(String pb, String newHeadId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (newHeadId.isEmpty()) {
+            // Trường hợp trưởng phòng hiện tại bị hạ xuống NV
+            db.collection("employees")
+                    .whereEqualTo("phongbanId", pb)
+                    .whereEqualTo("chucvuId", "TP")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        // Cập nhật maQuanLy phòng ban thành "" vì không còn trưởng phòng
+                        db.collection("phongban").document(pb)
+                                .update("maQuanLy", "")
+                                .addOnSuccessListener(aVoid1 -> Log.d("EmployeeEdit", "Cleared maQuanLy for department to empty"))
+                                .addOnFailureListener(e -> Log.e("EmployeeEdit", "Error updating department maQuanLy", e));
+
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                                String oldHeadId = document.getId(); // Lưu ID của trưởng phòng cũ
+
+                                // Cập nhật chức vụ của trưởng phòng cũ thành NV
+                                db.collection("employees").document(oldHeadId)
+                                        .update("chucvuId", "NV")
+                                        .addOnSuccessListener(aVoid -> {
+                                            Log.d("EmployeeEdit", "Updated old head to NV");
+                                        })
+                                        .addOnFailureListener(e -> Log.e("EmployeeEdit", "Error updating old head position", e));
+                            }
+                        } else {
+                            Log.w("EmployeeEdit", "No department head found to update.");
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("EmployeeEdit", "Error getting old head data", e));
+        } else {
+            // Trường hợp khi một trưởng phòng mới được bổ nhiệm
+            // Cập nhật chức vụ cho trưởng phòng mới
+            db.collection("employees")
+                    .document(newHeadId)
+                    .update("chucvuId", "TP", "phongbanId", pb) // Cập nhật phongbanId nếu cần
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("EmployeeEdit", "Updated new head to TP");
+
+                        // Cập nhật maQuanLy của phòng ban để phản ánh trưởng phòng mới
+                        db.collection("phongban").document(pb)
+                                .update("maQuanLy", newHeadId) // Cập nhật maQuanLy với ID của trưởng phòng mới
+                                .addOnSuccessListener(aVoid1 ->
+                                        Log.d("EmployeeEdit", "Updated maQuanLy for department to new head ID")
+                                )
+                                .addOnFailureListener(e ->
+                                        Log.e("EmployeeEdit", "Error updating department maQuanLy", e)
+                                );
+                    })
+                    .addOnFailureListener(e -> Log.e("EmployeeEdit", "Error updating new head position", e));
+        }
+    }
     // Phương thức cập nhật dữ liệu nhân viên trong Firestore
     private void updateEmployeeInFirestore(String employeeId, Employee updatedEmployee) {
         firebaseconnet.updateEmployee(employeeId, updatedEmployee, new firebaseconnet.OnEmployeeUpdatedListener() {
