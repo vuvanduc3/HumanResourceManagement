@@ -8,25 +8,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"/>
+            android:clickable="true"
+            android:src="@drawable/ic_back" />
+
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingRight="40dp"
             android:text="Chi tiết chức vụ"
             android:textSize="20sp"
-            android:textStyle="bold"
-
-            android:layout_marginStart="16dp"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
