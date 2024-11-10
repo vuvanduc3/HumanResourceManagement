@@ -2,6 +2,7 @@ package com.example.humanresourcemanagement.model;
 import com.google.firebase.firestore.PropertyName;
 
 public class CCCD {
+    @PropertyName("cccdNumber")
     private String cccdNumber;
 
     @PropertyName("frontImage")

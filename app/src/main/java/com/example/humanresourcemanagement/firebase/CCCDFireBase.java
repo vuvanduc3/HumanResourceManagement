@@ -42,12 +42,7 @@ public class CCCDFireBase {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         DocumentSnapshot document = task.getResult().getDocuments().get(0);
 
-
                         CCCD cccd = document.toObject(CCCD.class); // Chuyển tài liệu thành đối tượng CCCD
-
-
-
-
                         listener.onSuccess(cccd);
                     } else {
                         listener.onFailure(task.getException());
@@ -55,40 +50,15 @@ public class CCCDFireBase {
                 });
     }
 
-    // Phương thức upload ảnh lên Firebase Storage
-    public void uploadImageToStorage(Uri imageUri, String imageType, String cccdId, OnCCCDOperationCompleteListener listener) {
-        StorageReference storageReference = storage.getReference().child("cccd_images").child(cccdId).child(imageType);
-        storageReference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    // Lấy URL của ảnh
-                    String imageUrl = uri.toString();
-                    // Lưu đường dẫn ảnh vào Firestore (bạn có thể thay đổi cách lưu nếu cần)
-                    saveImageUrlToFirestore(cccdId, imageType, imageUrl, listener);
-                }))
-                .addOnFailureListener(e -> {
-                    listener.onFailure(e);
-                });
-    }
-
-    private void saveImageUrlToFirestore(String cccdId, String imageType, String imageUrl, OnCCCDOperationCompleteListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("cccd")
-                .document(cccdId)
-                .update(imageType, imageUrl)
-                .addOnSuccessListener(aVoid -> listener.onSuccess())
-                .addOnFailureListener(listener::onFailure);
-    }
-
-    // Interface callback để thông báo khi thao tác thành công hay thất bại
-    public interface OnCCCDOperationCompleteListener {
-        void onSuccess();
-        void onFailure(Exception e);
-    }
 
     // Interface callback để lấy dữ liệu từ Firestore
     public interface OnCCCDDataFetchedListener {
         void onSuccess(CCCD cccd);
         void onFailure(Exception e);
     }
-
+    // Interface callback để thông báo khi thao tác thành công hay thất bại
+    public interface OnCCCDOperationCompleteListener {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
 }
