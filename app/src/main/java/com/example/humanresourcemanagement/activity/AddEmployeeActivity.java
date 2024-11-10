@@ -123,6 +123,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
         // Sự kiện nhấn vào EditText etBirthDate để chọn ngày sinh
         binding.etBirthDate.setOnClickListener(view -> showDatePickerDialog(binding.etBirthDate));
 
+        binding.btnBack.setOnClickListener(view -> {
+            finish();
+        });
+
         // Sự kiện nhấn vào EditText etStartDate để chọn ngày bắt đầu
         binding.etStartDate.setOnClickListener(view -> showDatePickerDialog(binding.etStartDate));
 

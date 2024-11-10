@@ -36,6 +36,9 @@ public class BangCapDetailActivity extends AppCompatActivity {
         // Handle Edit button click
         binding.btnEditCV.setOnClickListener(view -> toggleEditing());
 
+        binding.btnBack.setOnClickListener(view -> {
+            finish();
+        });
         // Handle Save button click
         binding.btnSaveCV.setOnClickListener(view -> {
             if (areFieldsFilled()) {
