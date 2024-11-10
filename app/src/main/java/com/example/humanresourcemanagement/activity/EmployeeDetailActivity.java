@@ -41,6 +41,10 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         String employeeId = getIntent().getStringExtra("employeeId");
         boolean isEditable = getIntent().getBooleanExtra("isEditable", false);
 
+        if(!isEditable){
+            binding.btnCall.setVisibility(View.INVISIBLE);
+            binding.tvEditNV.setVisibility(View.INVISIBLE);
+        }
         // Khởi tạo Firebase
         firebaseconnet = new firebaseconnet(this);
 

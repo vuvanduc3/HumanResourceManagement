@@ -68,7 +68,7 @@ public class MenuProfileFragment extends Fragment {
         binding.btnPersonalInfo.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EmployeeDetailActivity.class);
             intent.putExtra("employeeId", employee.getEmployeeId());
-            intent.putExtra("isEditable", true);
+            intent.putExtra("isEditable", false);
             startActivity(intent);
         });
 

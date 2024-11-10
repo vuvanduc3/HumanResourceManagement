@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.activity.AddSkillNvActivity;
 import com.example.humanresourcemanagement.adapter.SkillNVAdapter;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
 import com.example.humanresourcemanagement.model.ChiTietSkill;
@@ -18,20 +19,14 @@ import com.example.humanresourcemanagement.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.Intent;
+import com.example.humanresourcemanagement.databinding.FragmentSkillBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SkillFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SkillFragment extends Fragment {
 
+    private FragmentSkillBinding binding;
     private firebaseconnet firebaseconnet;
-    // RecyclerView
-    private RecyclerView recyclerViewSkillnv;
-    private SkillNVAdapter Skillnvdapter;
-
-    // Data list
+    private SkillNVAdapter skillNVAdapter;
     private List<ChiTietSkill> chiTietSkillList = new ArrayList<>();
 
     public SkillFragment() {
@@ -49,65 +44,76 @@ public class SkillFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        firebaseconnet = new firebaseconnet(getContext());  // Initialize firebaseconnet
+        firebaseconnet = new firebaseconnet(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_skill, container, false);
+        binding = FragmentSkillBinding.inflate(inflater, container, false);
 
-        // Initialize RecyclerView and Adapter
-        recyclerViewSkillnv = view.findViewById(R.id.recyclerViewSkillNV);
-        recyclerViewSkillnv.setLayoutManager(new LinearLayoutManager(getContext()));
-        Skillnvdapter = new SkillNVAdapter(chiTietSkillList);
-        recyclerViewSkillnv.setAdapter(Skillnvdapter);
+        // Setup RecyclerView and Adapter
+        binding.recyclerViewSkillNV.setLayoutManager(new LinearLayoutManager(getContext()));
+        skillNVAdapter = new SkillNVAdapter(chiTietSkillList);
+        binding.recyclerViewSkillNV.setAdapter(skillNVAdapter);
 
-        // Retrieve employee data from arguments
+        // Load employee skills
         Employee employee = getArguments().getParcelable("employee_data");
         if (employee != null) {
-            getSkillNV(employee.getId());  // Load skills for this employee
+            getSkillNV(employee.getId());
         }
 
-        return view;
+        // Add click listener to the "Add Skill" button
+        binding.btnAddSK.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), AddSkillNvActivity.class);
+            intent.putExtra("employeeId", employee.getEmployeeId());
+            startActivity(intent);
+        });
+
+        return binding.getRoot();
     }
 
-    // Lấy thông tin kỹ năng nhân viên từ Firebase
+    // Retrieve employee skills from Firebase
     private void getSkillNV(String employeeId) {
         firebaseconnet.getSkillNhanVienById(employeeId, new firebaseconnet.OnSkillNVListReceivedListener() {
             @Override
             public void onSkillNVListReceived(List<ChiTietSkill> receivedSkillList) {
                 if (receivedSkillList != null && !receivedSkillList.isEmpty()) {
-                    chiTietSkillList.clear();  // Clear existing data
+                    chiTietSkillList.clear();
                     for (ChiTietSkill skill : receivedSkillList) {
                         String mask = skill.getMask();
                         firebaseconnet.getSkillName(mask, new firebaseconnet.OnSkillNameReceivedListener() {
                             @Override
                             public void onSkillNameReceived(String skillName) {
-                                skill.setMask(skillName);  // Set the actual skill name
-                                chiTietSkillList.add(skill);  // Add updated skill to the list
-                                Skillnvdapter.notifyDataSetChanged();  // Notify the adapter of changes
+                                skill.setMask(skillName);
+                                chiTietSkillList.add(skill);
+                                skillNVAdapter.notifyDataSetChanged();
                             }
 
                             @Override
                             public void onSkillNameError(Exception e) {
-                                Log.e("EmployeeDetail", "Error retrieving skill name", e);
-                                skill.setMask("No skill name");  // Default text on error
+                                Log.e("SkillFragment", "Error retrieving skill name", e);
+                                skill.setMask("No skill name");
                                 chiTietSkillList.add(skill);
-                                Skillnvdapter.notifyDataSetChanged();
+                                skillNVAdapter.notifyDataSetChanged();
                             }
                         });
                     }
                 } else {
-                    Log.d("EmployeeDetail", "No skills found for employee");
+                    Log.d("SkillFragment", "No skills found for employee");
                 }
             }
 
             @Override
             public void onSkillNVListError(Exception e) {
-                Log.e("EmployeeDetail", "Error retrieving skills", e);
+                Log.e("SkillFragment", "Error retrieving skills", e);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

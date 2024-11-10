@@ -52,6 +52,7 @@ public class EmployeeListActivity extends AppCompatActivity {
         employeeAdapter.setOnItemClickListener(employeeId -> {
             Intent intent = new Intent(EmployeeListActivity.this, EmployeeDetailActivity.class);
             intent.putExtra("employeeId", employeeId);
+            intent.putExtra("isEditable", true);
             startActivity(intent);
         });
 

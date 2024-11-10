@@ -1,5 +1,6 @@
 package com.example.humanresourcemanagement.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.humanresourcemanagement.R;
+import com.example.humanresourcemanagement.activity.AddBangCapNvActivity;
 import com.example.humanresourcemanagement.adapter.BangCapNVAdapter;
 import com.example.humanresourcemanagement.adapter.SkillNVAdapter;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
@@ -21,15 +23,12 @@ import com.example.humanresourcemanagement.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.humanresourcemanagement.databinding.FragmentDegreeBinding; // Thêm import cho ViewBinding
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DegreeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DegreeFragment extends Fragment {
 
-    private firebaseconnet firebaseconnet; // Initialize the firebaseconnet instance
+    private FragmentDegreeBinding binding; // Khai báo biến binding
+    private firebaseconnet firebaseconnet;
     private RecyclerView recyclerViewDegrees;
     private BangCapNVAdapter degreeAdapter;
     private List<ChiTietBangCap> chiTietBangCaps = new ArrayList<>();
@@ -49,18 +48,17 @@ public class DegreeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize firebaseconnet here
         firebaseconnet = new firebaseconnet(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_degree, container, false);
+        // Inflate the layout for this fragment using ViewBinding
+        binding = FragmentDegreeBinding.inflate(inflater, container, false);
 
         // Initialize RecyclerView and Adapter
-        recyclerViewDegrees = view.findViewById(R.id.recyclerViewDegrees);
+        recyclerViewDegrees = binding.recyclerViewDegrees;
         recyclerViewDegrees.setLayoutManager(new LinearLayoutManager(getContext()));
         degreeAdapter = new BangCapNVAdapter(chiTietBangCaps);
         recyclerViewDegrees.setAdapter(degreeAdapter);
@@ -71,7 +69,16 @@ public class DegreeFragment extends Fragment {
             getBangCapNV(employee.getId()); // Load degrees
         }
 
-        return view;
+        // Set the OnClickListener for the add degree button
+        binding.btnAddBC.setOnClickListener(view -> {
+            // Chuyển sang màn hình khác
+            Intent intent = new Intent(getContext(), AddBangCapNvActivity.class); // Thay thế với Activity muốn chuyển tới
+            intent.putExtra("employeeId", employee.getEmployeeId());
+
+            startActivity(intent);
+        });
+
+        return binding.getRoot();
     }
 
     private void getBangCapNV(String employeeId) {
@@ -94,5 +101,11 @@ public class DegreeFragment extends Fragment {
         } else {
             Log.e("DegreeFragment", "firebaseconnet is null");
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
