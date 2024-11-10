@@ -55,28 +55,32 @@ public class CCCDFireBase {
                 });
     }
 
-    // Phương thức upload ảnh lên Firebase Storage
-    public void uploadImageToStorage(Uri imageUri, String imageType, String cccdId, OnCCCDOperationCompleteListener listener) {
-        StorageReference storageReference = storage.getReference().child("cccd_images").child(cccdId).child(imageType);
-        storageReference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    // Lấy URL của ảnh
-                    String imageUrl = uri.toString();
-                    // Lưu đường dẫn ảnh vào Firestore (bạn có thể thay đổi cách lưu nếu cần)
-                    saveImageUrlToFirestore(cccdId, imageType, imageUrl, listener);
-                }))
+
+
+    public void addCCCD(String cccdNumber, String frontImage, String backImage, final OnCCCDAddListener listener) {
+        CollectionReference cccdRef = db.collection("cccd");
+
+        // Tạo một đối tượng Map chứa thông tin CCCD
+        Map<String, Object> cccdData = new HashMap<>();
+        cccdData.put("cccdNumber", cccdNumber);
+        cccdData.put("frontImage", frontImage);
+        cccdData.put("backImage", backImage);
+
+        // Sử dụng cccdNumber làm document ID để tránh trùng lặp
+        cccdRef.document(cccdNumber).set(cccdData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "CCCD đã được thêm thành công");
+                    listener.onCCCDAdded();
+                })
                 .addOnFailureListener(e -> {
-                    listener.onFailure(e);
+                    Log.w(TAG, "Lỗi khi thêm CCCD", e);
+                    listener.onCCCDAddError(e);
                 });
     }
 
-    private void saveImageUrlToFirestore(String cccdId, String imageType, String imageUrl, OnCCCDOperationCompleteListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("cccd")
-                .document(cccdId)
-                .update(imageType, imageUrl)
-                .addOnSuccessListener(aVoid -> listener.onSuccess())
-                .addOnFailureListener(listener::onFailure);
+    public interface OnCCCDAddListener {
+        void onCCCDAdded();
+        void onCCCDAddError(Exception e);
     }
 
     // Interface callback để thông báo khi thao tác thành công hay thất bại

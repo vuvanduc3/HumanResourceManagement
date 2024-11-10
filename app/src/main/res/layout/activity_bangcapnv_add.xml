@@ -114,17 +114,17 @@
 
                 <ImageView
                     android:id="@+id/imageUrl"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    />
+                    android:layout_width="302dp"
+                    android:layout_height="165dp"
+                    android:layout_gravity="center" />
 
                 <com.google.android.material.button.MaterialButton
+
                     android:id="@+id/btnSelectImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="90dp"
                     android:text="Chọn ảnh"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
             </FrameLayout>

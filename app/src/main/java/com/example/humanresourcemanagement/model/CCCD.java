@@ -10,9 +10,19 @@ public class CCCD {
     @PropertyName("backImage")
     private String backImage;
 
+
+    public CCCD(String cccdNumber, String frontImage, String backImage) {
+        this.cccdNumber = cccdNumber;
+        this.frontImage = frontImage;
+        this.backImage = backImage;
+    }
+
     // Getter và Setter cho các trường
     public String getCccdNumber() {
         return cccdNumber;
+    }
+
+    public CCCD() {
     }
 
     public void setCccdNumber(String cccdNumber) {

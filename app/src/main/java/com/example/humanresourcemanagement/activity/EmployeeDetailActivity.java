@@ -82,6 +82,11 @@ public class EmployeeDetailActivity extends AppCompatActivity {
             binding.tvEditNV.setVisibility(View.GONE);
         }
 
+        binding.tvCCCD.setOnClickListener(view ->{
+            Intent intent = new Intent(EmployeeDetailActivity.this, CCCDActivity.class);
+            intent.putExtra("cccd", cccdID);
+            startActivity(intent);
+        });
 
         // Chỉnh sửa thông tin nhân viên
         binding.tvEditNV.setOnClickListener(view -> {

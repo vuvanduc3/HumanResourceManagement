@@ -134,7 +134,7 @@ public class AddBangCapNvActivity extends AppCompatActivity {
 
     private void openImageChooser() {
         Intent intent = new Intent();
-        intent.setType("image/*");  // Sửa lại từ "bangcap/*" thành "image/*"
+        intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), PICK_IMAGE_REQUEST);
     }
