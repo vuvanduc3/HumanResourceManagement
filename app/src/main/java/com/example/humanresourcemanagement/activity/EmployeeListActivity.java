@@ -64,7 +64,6 @@ public class EmployeeListActivity extends AppCompatActivity {
             finish();
         });
         // Lấy danh sách nhân viên
-        loadEmployeeData();
 
         if (employee != null && "TP".equals(employee.getChucvuId())) {
             binding.btnThem.setVisibility(View.GONE);
@@ -77,6 +76,13 @@ public class EmployeeListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadEmployeeData();
     }
 
     private void loadEmployeeData() {

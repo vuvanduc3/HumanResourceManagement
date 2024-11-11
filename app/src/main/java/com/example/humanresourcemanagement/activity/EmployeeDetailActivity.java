@@ -31,6 +31,8 @@ public class EmployeeDetailActivity extends AppCompatActivity {
     private String cccdID;
     private Employee employeeInfo;
 
+    private String employeeId1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         // Gọi hàm lấy thông tin nhân viên
         getEmployeeDetails(employeeId);
 
+        employeeId1=employeeId;
         // Quay lại màn hình trước
         binding.btnBack.setOnClickListener(v -> finish());
 
@@ -70,6 +73,14 @@ public class EmployeeDetailActivity extends AppCompatActivity {
 //                startActivity(callIntent);
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getEmployeeDetails(employeeId1);
+
     }
 
     // Thiết lập TabLayout và ViewPager2
@@ -96,6 +107,9 @@ public class EmployeeDetailActivity extends AppCompatActivity {
             }
         }).attach();
     }
+
+
+
 
     private void getEmployeeDetails(String employeeId) {
         firebaseconnet.getEmployeeById(employeeId, new firebaseconnet.OnEmployeeReceivedListener() {

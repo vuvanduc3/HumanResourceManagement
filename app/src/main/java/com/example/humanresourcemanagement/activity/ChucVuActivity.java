@@ -40,7 +40,6 @@ public class ChucVuActivity extends AppCompatActivity {
 
         // Khởi tạo Firebase connection
         firebaseConnection = new firebaseconnet(this);
-        loadChucVuData();
         // Khởi tạo RecyclerView và Adapter
         recyclerViewChucVu = findViewById(R.id.recyclerViewChucVu);
         recyclerViewChucVu.setLayoutManager(new LinearLayoutManager(this));
@@ -135,6 +134,8 @@ public class ChucVuActivity extends AppCompatActivity {
 
     }
 
+
+
     // Phương thức gọi Firebase để thêm chức vụ
     private void addChucVu(String chucvuId, String tenChucVu, String heSoChucVu, firebaseconnet.OnChucVuAddListener listener) {
         firebaseConnection.addChucVu(chucvuId, tenChucVu, heSoChucVu, new firebaseconnet.OnChucVuAddListener() {
@@ -148,6 +149,13 @@ public class ChucVuActivity extends AppCompatActivity {
                 listener.onChucVuAddError(e); // Gọi callback khi có lỗi
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadChucVuData();
     }
 
     // Tải danh sách chức vụ từ Firebase
