@@ -17,7 +17,9 @@ import com.example.humanresourcemanagement.R;
 import com.example.humanresourcemanagement.adapter.EmployeeDetailAdapter;
 import com.example.humanresourcemanagement.databinding.ActivityEmployeeDetailBinding;
 import com.example.humanresourcemanagement.firebase.firebaseconnet;
+import com.example.humanresourcemanagement.firebase.phongBanfirebase;
 import com.example.humanresourcemanagement.model.Employee;
+import com.example.humanresourcemanagement.model.PhongBan;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.squareup.picasso.Picasso;
@@ -28,9 +30,10 @@ public class EmployeeDetailActivity extends AppCompatActivity {
     private static final int ADD_SKILL_REQUEST = 2;
     private ActivityEmployeeDetailBinding binding;
     private firebaseconnet firebaseconnet;
+    private  phongBanfirebase phongban ;
     private String cccdID;
     private Employee employeeInfo;
-
+private String pbnamme;
     private String employeeId1;
 
     @Override
@@ -49,7 +52,7 @@ public class EmployeeDetailActivity extends AppCompatActivity {
         }
         // Khởi tạo Firebase
         firebaseconnet = new firebaseconnet(this);
-
+        phongban = new phongBanfirebase(this);
         // Gọi hàm lấy thông tin nhân viên
         getEmployeeDetails(employeeId);
 
@@ -117,6 +120,19 @@ public class EmployeeDetailActivity extends AppCompatActivity {
             public void onEmployeeReceived(Employee employee) {
                 employeeInfo = employee;
                 cccdID = employee.getCccd();
+                phongban.getPhongBanById(employee.getPhongbanId(), new phongBanfirebase.OnPhongBanReceivedListener() {
+                    @Override
+                    public void onPhongBanReceived(PhongBan phongBan) {
+                        pbnamme = phongBan.getTenPhongBan();
+                    }
+
+                    @Override
+                    public void onPhongBanError(Exception e) {
+                        pbnamme = "Hjhj";
+                    }
+                });
+                Log.d("TAG", "onEmployeeReceived: "+pbnamme);
+                binding.phongBanInfo.setText(employee.getPhongbanId());
                 binding.nameTextViewInfo.setText(employee.getName());
                 if (employee.getImageUrl() != null && !employee.getImageUrl().isEmpty()) {
                     Picasso.get().load(employee.getImageUrl()).into(binding.profileImageView);
